@@ -35,7 +35,7 @@ const SearchInput: React.FC = () => {
         className={classNames({
           [styles.searchInput]: true,
         })}
-        placeholder="Search by landlord name, city, or rating..."
+        placeholder="Search by address, city, or rating..."
         aria-label="Search"
         aria-describedby="basic-addon1"
         value={query}
