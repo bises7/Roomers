@@ -18,7 +18,7 @@ function NavbarComponent() {
         [styles.whiteNav]: true,
       })}
     >
-      <Container>
+      <Container fluid>
         <Navbar.Brand href="/">
           <Image src={logo} alt="Roomers logo" width={60} />
         </Navbar.Brand>

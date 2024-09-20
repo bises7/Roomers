@@ -1,11 +1,19 @@
 .medium {
-    font-weight: 500;
+  font-weight: 500;
 }
 
 .skyblue {
-    background-color: #338AE5 !important;
+  background-color: #338ae5 !important;
 }
 
 .button {
-    border-radius: 12px;
+  border-radius: 12px;
+}
+
+.jumbotron,
+.jumbotronImage {
+  width: 100%;
+  height: fit-content;
+  border-radius: 12px;
+  filter: drop-shadow(0px 4px 3px rgb(206, 206, 206));
 }
