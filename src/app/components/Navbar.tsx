@@ -15,6 +15,7 @@ function NavbarComponent() {
       className={classNames({
         "bg-body-tertiary": true,
         [common.medium]: true,
+        [styles.whiteNav]: true,
       })}
     >
       <Container>
