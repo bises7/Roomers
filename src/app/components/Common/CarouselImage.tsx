@@ -23,7 +23,6 @@ const CarouselImage: NextPage<Props> = ({
       <Col
         sm={4}
         className={classNames({
-          "text-center": true,
           [styles.carouselItem]: true,
         })}
       >
