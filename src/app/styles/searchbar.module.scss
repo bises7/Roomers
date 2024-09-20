@@ -9,26 +9,27 @@
   padding: 8px 10px;
   font-size: 16px;
   border: 1px solid #ccc;
-  border-radius: 4px;
   background-color: transparent !important;
   border-left: none !important;
   margin-left: 0;
   padding-left: 0;
+
+  border-color: #dee2e6 !important;
 }
 
 .searchInput:focus {
-  border-color: #ccc !important;
   outline-color: none;
   box-shadow: none;
+  border-radius: 12px;
 }
 
 .suggestionsList {
   position: absolute;
-  top: 100%;
+  top: 110%;
   left: 0;
   right: 0;
   background: white;
-  border: 1px solid #ccc;
+  border: 1px solid #dee2e6;
   border-top: none;
   border-radius: 0 0 4px 4px;
   z-index: 999;
@@ -53,5 +54,20 @@
 
 .searchBarIcon {
   background-color: transparent !important;
+  border-radius: 12px;
   border-right: none !important;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+
+.enterIcon {
+  background-color: transparent !important;
+  border-radius: 12px;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+  cursor: pointer;
+}
+
+.enterIcon:hover {
+  background-color: #dee2e6 !important;
 }
