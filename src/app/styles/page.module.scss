@@ -49,3 +49,15 @@
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
+
+.searchBarIcon {
+  background-color: transparent !important;
+  border-right: none !important;
+}
+
+.searchBar {
+  background-color: transparent !important;
+  border-left: none !important;
+  margin-left: 0;
+  padding-left: 0;
+}

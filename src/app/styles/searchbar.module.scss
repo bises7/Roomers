@@ -10,6 +10,16 @@
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  background-color: transparent !important;
+  border-left: none !important;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.searchInput:focus {
+  border-color: #ccc !important;
+  outline-color: none;
+  box-shadow: none;
 }
 
 .suggestionsList {
@@ -28,7 +38,7 @@
 }
 
 .suggestionsList li {
-  padding: 8px 10px;
+  padding: 10px 10px;
   cursor: pointer;
   line-height: 20px;
 }
@@ -39,4 +49,9 @@
 
 .suggestionsList li:hover {
   background-color: #f8f8f8;
+}
+
+.searchBarIcon {
+  background-color: transparent !important;
+  border-right: none !important;
 }

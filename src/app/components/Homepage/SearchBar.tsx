@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { FormControl, InputGroup, ListGroup } from "react-bootstrap";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { BsSearch } from "react-icons/bs";
+import classNames from "classnames";
+import styles from "../../styles/searchbar.module.scss";
 
 const SearchInput: React.FC = () => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -29,10 +31,18 @@ const SearchInput: React.FC = () => {
 
   return (
     <InputGroup className="mt-4">
-      <InputGroup.Text id="basic-addon1">
+      <InputGroup.Text
+        className={classNames({
+          [styles.searchBarIcon]: true,
+        })}
+        id="basic-addon1"
+      >
         <BsSearch />
       </InputGroup.Text>
       <FormControl
+        className={classNames({
+          [styles.searchInput]: true,
+        })}
         placeholder="Search by landlord name, city, or rating..."
         aria-label="Search"
         aria-describedby="basic-addon1"
@@ -40,7 +50,12 @@ const SearchInput: React.FC = () => {
         onChange={(e) => handleSearch(e.target.value)}
       />
       {suggestions.length > 0 && (
-        <ListGroup className="position-absolute w-100">
+        <ListGroup
+          className={classNames({
+            "position-absolute w-100": true,
+            [styles.suggestionsList]: true,
+          })}
+        >
           {suggestions.map((item, index) => (
             <ListGroup.Item key={index} action onClick={() => setQuery(item)}>
               {item}
