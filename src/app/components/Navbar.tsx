@@ -61,6 +61,7 @@ function NavbarComponent() {
               variant="primary"
               className={classNames({
                 [common.skyblue]: true,
+                [common.medium]: true,
                 [common.button]: true,
               })}
             >
