@@ -1,7 +1,6 @@
 // components/SearchInput.tsx
-import classNames from "classnames";
 import React, { useState } from "react";
-import { Form, FormControl, InputGroup, ListGroup } from "react-bootstrap";
+import { FormControl, InputGroup, ListGroup } from "react-bootstrap";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { BsSearch } from "react-icons/bs";
 
