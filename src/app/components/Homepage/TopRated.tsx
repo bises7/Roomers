@@ -1,4 +1,4 @@
-import { Carousel, Col, Row } from "react-bootstrap";
+import { Carousel, Row } from "react-bootstrap";
 import CarouselComponent from "./Carousel";
 import CarouselImage from "../Common/CarouselImage";
 import Property1Image from "../../../public/images/property1.png";
@@ -9,8 +9,8 @@ import { useState } from "react";
 function TopRated() {
   const [interval] = useState(5000);
 
-  let carouselItems = [
-    <Carousel.Item interval={interval}>
+  const carouselItems = [
+    <Carousel.Item key={1} interval={interval}>
       <Row>
         <CarouselImage
           image={Property1Image}
@@ -32,7 +32,7 @@ function TopRated() {
         />
       </Row>
     </Carousel.Item>,
-    <Carousel.Item interval={interval}>
+    <Carousel.Item key={2} interval={interval}>
       <Row>
         <CarouselImage
           image={Property1Image}
