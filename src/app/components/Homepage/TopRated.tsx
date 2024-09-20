@@ -1,9 +1,9 @@
 import { Carousel, Col, Row } from "react-bootstrap";
 import CarouselComponent from "./Carousel";
 import CarouselImage from "../Common/CarouselImage";
-import Property1Image from "../../../public/images/Property1.png";
-import Property2Image from "../../../public/images/Property2.png";
-import Property3Image from "../../../public/images/Property3.png";
+import Property1Image from "../../../public/images/property1.png";
+import Property2Image from "../../../public/images/property2.png";
+import Property3Image from "../../../public/images/property3.png";
 import { useState } from "react";
 
 function TopRated() {
