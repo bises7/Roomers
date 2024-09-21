@@ -11,6 +11,7 @@ import HowItWorks from "./components/Homepage/HowItWorks";
 import RecentReviews from "./components/Homepage/RecentReviews";
 import WhyRoomers from "./components/Homepage/WhyRoomers";
 import HeplUs from "./components/Homepage/HeplUs";
+import Footer from "./components/Homepage/Footer";
 
 export default function Home() {
   return (
@@ -29,10 +30,11 @@ export default function Home() {
         <Jumbotron />
         <SearchInput />
         <TopRated />
-        <HowItWorks className=""/>
-        <RecentReviews className=""/>
-        <WhyRoomers className=""/>
-        <HeplUs className=""/>
+        <HowItWorks className="" />
+        <RecentReviews className="" />
+        <WhyRoomers className="" />
+        <HeplUs className="" />
+        <Footer className="" />
       </Container>
     </>
   );
