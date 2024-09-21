@@ -2,11 +2,11 @@ import { NextPage } from "next";
 import common from "../../styles/common.module.scss";
 import styles from "../../styles/informationBox.module.scss";
 import classNames from "classnames";
-import { ReactElement } from "react";
+import { JSXElementConstructor, ReactElement } from "react";
 import { Col } from "react-bootstrap";
 
 interface Props {
-  icon: ReactElement<any, any>;
+  icon: ReactElement<string, JSXElementConstructor<number>>;
   title: string;
   info: string;
 }
