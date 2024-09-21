@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { Col, Row } from "react-bootstrap";
+import { Row } from "react-bootstrap";
 import InformationBox from "./InformationBox";
 import { BsChat, BsCheck2, BsSearch } from "react-icons/bs";
 
