@@ -9,7 +9,7 @@ interface Props {
 const Footer: NextPage<Props> = ({}) => {
   return (
     <div className="my-5">
-      <Row>
+      <Row className="text-center">
         <Col>
           <span className="lead">
             <b>About Us</b>
