@@ -9,6 +9,7 @@ import SearchInput from "./components/Homepage/SearchBar";
 import TopRated from "./components/Homepage/TopRated";
 import HowItWorks from "./components/Homepage/HowItWorks";
 import RecentReviews from "./components/Homepage/RecentReviews";
+import WhyRoomers from "./components/Homepage/WhyRoomers";
 
 export default function Home() {
   return (
@@ -29,6 +30,7 @@ export default function Home() {
         <TopRated />
         <HowItWorks />
         <RecentReviews />
+        <WhyRoomers />
       </Container>
     </>
   );
