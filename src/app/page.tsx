@@ -28,9 +28,9 @@ export default function Home() {
         <Jumbotron />
         <SearchInput />
         <TopRated />
-        <HowItWorks />
-        <RecentReviews />
-        <WhyRoomers />
+        <HowItWorks className=""/>
+        <RecentReviews className=""/>
+        <WhyRoomers className=""/>
       </Container>
     </>
   );
