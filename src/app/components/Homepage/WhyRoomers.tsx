@@ -9,7 +9,9 @@ import {
   BsShieldCheck,
 } from "react-icons/bs";
 
-interface Props {}
+interface Props {
+  className: string
+}
 
 const WhyRoomers: NextPage<Props> = ({}) => {
   return (

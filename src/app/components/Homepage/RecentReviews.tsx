@@ -6,7 +6,11 @@ import CarouselImage from "../Common/CarouselImage";
 import Property1Image from "../../../public/images/property1.png";
 import Property2Image from "../../../public/images/property2.png";
 import Property3Image from "../../../public/images/property3.png";
-interface Props {}
+
+interface Props {
+  className: string
+}
+
 
 const RecentReviews: NextPage<Props> = ({}) => {
   const [interval] = useState(5000);

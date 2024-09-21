@@ -3,7 +3,9 @@ import { Row } from "react-bootstrap";
 import InformationBox from "./InformationBox";
 import { BsChat, BsCheck2, BsSearch } from "react-icons/bs";
 
-interface Props {}
+interface Props {
+  className: string
+}
 
 const HowItWorks: NextPage<Props> = ({}) => {
   return (

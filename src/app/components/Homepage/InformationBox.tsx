@@ -7,8 +7,8 @@ import { Col } from "react-bootstrap";
 
 interface Props {
   icon: ReactElement<any, any>;
-  title: String;
-  info: String;
+  title: string;
+  info: string;
 }
 
 const InformationBox: NextPage<Props> = ({ icon, title, info }) => {
