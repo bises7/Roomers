@@ -7,6 +7,7 @@ import Jumbotron from "./components/Homepage/Jumbotron";
 import { Container } from "react-bootstrap";
 import SearchInput from "./components/Homepage/SearchBar";
 import TopRated from "./components/Homepage/TopRated";
+import HowItWorks from "./components/Homepage/HowItWorks";
 
 export default function Home() {
   return (
@@ -25,6 +26,7 @@ export default function Home() {
         <Jumbotron />
         <SearchInput />
         <TopRated />
+        <HowItWorks/>
       </Container>
     </>
   );
