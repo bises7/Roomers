@@ -4,13 +4,13 @@ import InformationBox from "./InformationBox";
 import { BsChat, BsCheck2, BsSearch } from "react-icons/bs";
 
 interface Props {
-  className: string
+  className: string;
 }
 
 const HowItWorks: NextPage<Props> = ({}) => {
   return (
     <div className="mt-5">
-      <h5>How Roomers.space Works</h5>
+      <h4>How Roomers.space Works</h4>
       <Row className="mt-4">
         <InformationBox
           icon={<BsSearch size={24} />}

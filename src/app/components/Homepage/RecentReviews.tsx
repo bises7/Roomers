@@ -8,9 +8,8 @@ import Property2Image from "../../../public/images/property2.png";
 import Property3Image from "../../../public/images/property3.png";
 
 interface Props {
-  className: string
+  className: string;
 }
-
 
 const RecentReviews: NextPage<Props> = ({}) => {
   const [interval] = useState(5000);
@@ -64,7 +63,7 @@ const RecentReviews: NextPage<Props> = ({}) => {
 
   return (
     <div className="mt-5">
-      <h5>Recent Reviews</h5>
+      <h4>Recent Reviews</h4>
       <CarouselComponent carouselItems={carouselItems} />
     </div>
   );

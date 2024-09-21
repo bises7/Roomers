@@ -58,7 +58,7 @@ function TopRated() {
 
   return (
     <div className="mt-4">
-      <h5>Top-Rated Properties</h5>
+      <h4>Top-Rated Properties</h4>
       <CarouselComponent carouselItems={carouselItems} />
     </div>
   );

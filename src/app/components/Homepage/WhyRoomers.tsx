@@ -10,13 +10,13 @@ import {
 } from "react-icons/bs";
 
 interface Props {
-  className: string
+  className: string;
 }
 
 const WhyRoomers: NextPage<Props> = ({}) => {
   return (
     <div className="mt-5">
-      <h5>Why Roomers.space?</h5>
+      <h4>Why Roomers.space?</h4>
       <Row className="mt-4">
         <InformationBox
           icon={<BsChat size={24} />}
@@ -26,7 +26,9 @@ const WhyRoomers: NextPage<Props> = ({}) => {
         <InformationBox
           icon={<BsShieldCheck size={24} />}
           title={"Discover Reliable Landlords"}
-          info={"Find trustworthy landlords based on feedback from the community"}
+          info={
+            "Find trustworthy landlords based on feedback from the community"
+          }
         />
         <InformationBox
           icon={<BsHeart size={24} />}
