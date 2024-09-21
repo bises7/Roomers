@@ -10,6 +10,7 @@ import TopRated from "./components/Homepage/TopRated";
 import HowItWorks from "./components/Homepage/HowItWorks";
 import RecentReviews from "./components/Homepage/RecentReviews";
 import WhyRoomers from "./components/Homepage/WhyRoomers";
+import HeplUs from "./components/Homepage/HeplUs";
 
 export default function Home() {
   return (
@@ -31,6 +32,7 @@ export default function Home() {
         <HowItWorks className=""/>
         <RecentReviews className=""/>
         <WhyRoomers className=""/>
+        <HeplUs className=""/>
       </Container>
     </>
   );
