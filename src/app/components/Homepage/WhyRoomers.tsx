@@ -18,28 +18,28 @@ const WhyRoomers: NextPage<Props> = ({}) => {
       <Row className="mt-4">
         <InformationBox
           icon={<BsChat size={24} />}
-          title={"Search"}
-          info={"Find properties, cities, or ratings"}
+          title={"Share Honest Feedback"}
+          info={"Write reviews based on your experiences"}
         />
         <InformationBox
           icon={<BsShieldCheck size={24} />}
-          title={"Read Reviews"}
-          info={"Discover honest review from other renters"}
+          title={"Discover Reliable Landlords"}
+          info={"Find trustworthy landlords based on feedback from the community"}
         />
         <InformationBox
           icon={<BsHeart size={24} />}
-          title={"Search"}
-          info={"Share your experience and help others"}
+          title={"Help Others Find Great Homes"}
+          info={"Your review can help others find a great home"}
         />
         <InformationBox
           icon={<BsList size={24} />}
-          title={"Search"}
-          info={"Share your experience and help others"}
+          title={"Community-Driven"}
+          info={"Our platform is built on trust and collaboration"}
         />
         <InformationBox
           icon={<BsGlobe2 size={24} />}
-          title={"Search"}
-          info={"Share your experience and help others"}
+          title={"Completely Free"}
+          info={"We don't charge fees to read or write reviews"}
         />
       </Row>
     </div>
