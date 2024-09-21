@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "classnames";
-import NavbarComponent from "./components/Navbar";
+import NavbarComponent from "./components/Common/Navbar";
 import styles from "./styles/page.module.scss";
 import Jumbotron from "./components/Homepage/Jumbotron";
 import { Container } from "react-bootstrap";
@@ -11,7 +11,7 @@ import HowItWorks from "./components/Homepage/HowItWorks";
 import RecentReviews from "./components/Homepage/RecentReviews";
 import WhyRoomers from "./components/Homepage/WhyRoomers";
 import HeplUs from "./components/Homepage/HeplUs";
-import Footer from "./components/Homepage/Footer";
+import Footer from "./components/Common/Footer";
 
 export default function Home() {
   return (

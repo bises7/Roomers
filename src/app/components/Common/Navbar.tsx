@@ -1,11 +1,11 @@
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import logo from "../../public/images/logo.png";
+import logo from "../../../public/images/logo.png";
 import Image from "next/image";
 import { Button } from "react-bootstrap";
-import styles from "../styles/navbar.module.scss";
-import common from "../styles/common.module.scss";
+import styles from "../../styles/navbar.module.scss";
+import common from "../../styles/common.module.scss";
 import classNames from "classnames";
 
 function NavbarComponent() {
