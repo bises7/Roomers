@@ -7,11 +7,9 @@ import {
   FormControl,
   FormLabel,
   Modal,
-  Nav,
   Row,
 } from "react-bootstrap";
 import { useState } from "react";
-import navbarStyles from "../../styles/navbar.module.scss";
 import common from "../../styles/common.module.scss";
 import searchBarStyles from "../../styles/searchbar.module.scss";
 import styles from "../../styles/auth.module.scss";
@@ -19,24 +17,29 @@ import { BsApple, BsFacebook, BsGoogle } from "react-icons/bs";
 
 interface Props {}
 
-const Login: NextPage<Props> = ({}) => {
+const Register: NextPage<Props> = ({}) => {
   const [show, setShow] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [termsAndCondition, setTermsAndCondition] = useState(false);
+  const [privacyPolicy, setPrivacyPolicy] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   return (
     <>
-      <Nav.Link
+      <Button
+        variant="primary"
         className={classNames({
-          [navbarStyles.link]: true,
+          [common.skyblue]: true,
+          [common.medium]: true,
+          [common.button]: true,
         })}
         onClick={handleShow}
       >
-        Log in
-      </Nav.Link>
+        Get Started
+      </Button>
 
       <Modal show={show} onHide={handleClose} centered size="lg">
         <Modal.Body className="p-5">
@@ -86,31 +89,23 @@ const Login: NextPage<Props> = ({}) => {
                     [common.skyblue]: true,
                   })}
                 >
-                  Sign In
+                  Sign Up
                 </Button>
               </Form>
             </Col>
           </Row>
 
-          <div className="text-center mt-3">
-            <small
-              className={classNames({
-                "text-muted": true,
-                [styles.link]: true,
-              })}
-            >
-              Forgot your password?
-            </small>
+          <div className="text-center">
             <br />
             <small className="text-muted">
-              New to Roomers Space?{" "}
+              Already have an account?&nbsp;
               <span
                 className={classNames({
                   "text-muted": true,
                   [styles.link]: true,
                 })}
               >
-                Sign up
+                Sign in
               </span>
             </small>
           </div>
@@ -170,4 +165,4 @@ const Login: NextPage<Props> = ({}) => {
   );
 };
 
-export default Login;
+export default Register;

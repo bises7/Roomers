@@ -10,6 +10,7 @@ import classNames from "classnames";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Login from "../Auth/Login";
+import Register from "../Auth/Register";
 
 function NavbarComponent() {
   const pathname = usePathname();
@@ -62,16 +63,7 @@ function NavbarComponent() {
             </Link>
 
             <Login />
-            <Button
-              variant="primary"
-              className={classNames({
-                [common.skyblue]: true,
-                [common.medium]: true,
-                [common.button]: true,
-              })}
-            >
-              Get Started
-            </Button>
+            <Register />
           </Nav>
         </Navbar.Collapse>
       </Container>
