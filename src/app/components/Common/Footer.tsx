@@ -1,6 +1,9 @@
 import { NextPage } from "next";
+import Link from "next/link";
 import { Col, Row } from "react-bootstrap";
 import { BsFacebook, BsInstagram, BsTwitterX } from "react-icons/bs";
+import styles from "../../styles/footer.module.scss";
+import classNames from "classnames";
 
 interface Props {
   className: string;
@@ -12,42 +15,105 @@ const Footer: NextPage<Props> = ({}) => {
       <Row className="text-center">
         <Col>
           <span className="lead">
-            <b>About Us</b>
+            <Link
+              href="/about"
+              className={classNames({
+                [styles.links]: true,
+              })}
+            >
+              <b>About Us</b>
+            </Link>
           </span>
         </Col>
         <Col>
           <span className="lead">
-            <b>FAQ</b>
+            <Link
+              href="/faq"
+              className={classNames({
+                [styles.links]: true,
+              })}
+            >
+              <b>FAQ</b>
+            </Link>
           </span>
         </Col>
         <Col>
           <span className="lead">
-            <b>Blog</b>
+            <Link
+              href="/blog"
+              className={classNames({
+                [styles.links]: true,
+              })}
+            >
+              <b>Blog</b>
+            </Link>
           </span>
         </Col>
         <Col>
           <span className="lead">
-            <b>Contact Us</b>
+            <Link
+              href="/contact"
+              className={classNames({
+                [styles.links]: true,
+              })}
+            >
+              <b>Contact Us</b>
+            </Link>
           </span>
         </Col>
         <Col>
           <span className="lead">
-            <b>Terms & Conditions</b>
+            <Link
+              href="/terms-and-condition"
+              className={classNames({
+                [styles.links]: true,
+              })}
+            >
+              <b>Terms & Conditions</b>
+            </Link>
           </span>
         </Col>
       </Row>
       <Row className="mt-3">
         <Col className="col-12 text-center">
           <span className="lead">
-            <b>Privacy Policy</b>
+            <Link
+              href="/privacy-policy"
+              className={classNames({
+                [styles.links]: true,
+              })}
+            >
+              <b>Privacy Policy</b>
+            </Link>
           </span>
         </Col>
       </Row>
       <Row className="mt-3">
         <Col className="col-12 text-center text-muted">
-          <BsInstagram size={24} className="me-3" />
-          <BsTwitterX size={24} className="me-3" />
-          <BsFacebook size={24} />
+          <Link
+            href="/privacy-policy"
+            className={classNames({
+              [styles.links]: true,
+            })}
+          >
+            <BsInstagram size={24} className="me-3" />
+          </Link>{" "}
+          <Link
+            href="/privacy-policy"
+            className={classNames({
+              [styles.links]: true,
+            })}
+          >
+            <BsTwitterX size={24} className="me-3" />
+          </Link>
+          <Link
+            href="/privacy-policy"
+            className={classNames({
+              [styles.links]: true,
+            })}
+          >
+            <BsFacebook size={24} />
+          </Link>
         </Col>
       </Row>
     </div>
