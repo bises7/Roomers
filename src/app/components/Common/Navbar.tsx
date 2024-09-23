@@ -7,8 +7,12 @@ import { Button } from "react-bootstrap";
 import styles from "../../styles/navbar.module.scss";
 import common from "../../styles/common.module.scss";
 import classNames from "classnames";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 function NavbarComponent() {
+  const pathname = usePathname();
+
   return (
     <Navbar
       expand="lg"
@@ -25,37 +29,45 @@ function NavbarComponent() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
-            <Nav.Link
-              className={classNames({
-                [styles.link]: true,
-              })}
-              href="#home"
-            >
-              Home
+            <Nav.Link active={pathname === "/"}>
+              <Link
+                href="/"
+                className={classNames({
+                  [styles.link]: true,
+                })}
+              >
+                Home
+              </Link>
             </Nav.Link>
-            <Nav.Link
-              href="#link"
-              className={classNames({
-                [styles.link]: true,
-              })}
-            >
-              Browse Reviews
+            <Nav.Link active={pathname === "/borwse-reviews"}>
+              <Link
+                href="/browse-reviews"
+                className={classNames({
+                  [styles.link]: true,
+                })}
+              >
+                Browse Reviews
+              </Link>
             </Nav.Link>
-            <Nav.Link
-              href="#link"
-              className={classNames({
-                [styles.link]: true,
-              })}
-            >
-              Submit a Review
+            <Nav.Link active={pathname === "/submit-review"}>
+              <Link
+                href="/submit-review"
+                className={classNames({
+                  [styles.link]: true,
+                })}
+              >
+                Submit a Review
+              </Link>
             </Nav.Link>
-            <Nav.Link
-              href="#link"
-              className={classNames({
-                [styles.link]: true,
-              })}
-            >
-              Log in
+            <Nav.Link active={pathname === "/login"}>
+              <Link
+                href="/login"
+                className={classNames({
+                  [styles.link]: true,
+                })}
+              >
+                Log in
+              </Link>
             </Nav.Link>
             <Button
               variant="primary"

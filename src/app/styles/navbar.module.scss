@@ -1,7 +1,17 @@
 .link {
   margin-right: 1rem;
+  text-decoration: none;
+  color: #637587;
 }
 
 .whiteNav {
   background-color: white !important;
+}
+
+.link:hover {
+  color: black;
+}
+
+.link:active {
+  color: black;
 }
