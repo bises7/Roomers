@@ -45,7 +45,7 @@ const Footer: NextPage<Props> = ({}) => {
                 [styles.links]: true,
               })}
             >
-              <b>Blog</b>
+              <b>Blogs</b>
             </Link>
           </span>
         </Col>
