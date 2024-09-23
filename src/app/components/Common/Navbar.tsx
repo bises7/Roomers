@@ -62,7 +62,7 @@ function NavbarComponent() {
               Submit a Review
             </Link>
 
-            <Login />
+            <Login classnames="" />
             <Register value="Get Started" />
           </Nav>
         </Navbar.Collapse>

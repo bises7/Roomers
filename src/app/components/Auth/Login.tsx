@@ -17,7 +17,9 @@ import searchBarStyles from "../../styles/searchbar.module.scss";
 import styles from "../../styles/auth.module.scss";
 import { BsApple, BsFacebook, BsGoogle } from "react-icons/bs";
 
-interface Props {}
+interface Props {
+  classnames: string;
+}
 
 const Login: NextPage<Props> = ({}) => {
   const [show, setShow] = useState(false);

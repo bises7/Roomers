@@ -3,7 +3,7 @@
 import { NextPage } from "next";
 import Jumbotron from "./Jumbotron";
 import NavbarComponent from "../components/Common/Navbar";
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import footerStyles from "../styles/footer.module.scss";
 import common from "../styles/common.module.scss";
 import styles from "../styles/about.module.scss";
@@ -13,7 +13,9 @@ import { FaRegHandshake } from "react-icons/fa6";
 import Footer from "../components/Common/Footer";
 import Register from "../components/Auth/Register";
 
-interface Props {}
+interface Props {
+  classnames: string;
+}
 
 const Page: NextPage<Props> = ({}) => {
   return (

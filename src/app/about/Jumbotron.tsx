@@ -1,9 +1,7 @@
 import Image from "next/image";
 import JumbotronImage from "../../public/images/AboutUs.webp";
 import classNames from "classnames";
-import common from "../styles/common.module.scss";
 import styles from "../styles/page.module.scss";
-import { Button } from "react-bootstrap";
 import Register from "../components/Auth/Register";
 
 function Jumbotron() {

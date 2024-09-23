@@ -83,6 +83,17 @@ const Register: NextPage<Props> = ({ value }) => {
                   formNoValidate
                 />
 
+                <Form.Check
+                  className="mt-3"
+                  type={"checkbox"}
+                  label="I accept the Terms and Conditions"
+                />
+
+                <Form.Check
+                  type={"checkbox"}
+                  label="I accept the Privacy Policy"
+                />
+
                 <Button
                   variant="primary"
                   className={classNames({
