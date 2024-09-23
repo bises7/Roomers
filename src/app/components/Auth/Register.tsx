@@ -15,9 +15,11 @@ import searchBarStyles from "../../styles/searchbar.module.scss";
 import styles from "../../styles/auth.module.scss";
 import { BsApple, BsFacebook, BsGoogle } from "react-icons/bs";
 
-interface Props {}
+interface Props {
+  value: string;
+}
 
-const Register: NextPage<Props> = ({}) => {
+const Register: NextPage<Props> = ({ value }) => {
   const [show, setShow] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,7 +40,7 @@ const Register: NextPage<Props> = ({}) => {
         })}
         onClick={handleShow}
       >
-        Get Started
+        {value}
       </Button>
 
       <Modal show={show} onHide={handleClose} centered size="lg">

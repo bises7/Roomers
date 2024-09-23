@@ -63,7 +63,7 @@ function NavbarComponent() {
             </Link>
 
             <Login />
-            <Register />
+            <Register value="Get Started" />
           </Nav>
         </Navbar.Collapse>
       </Container>
