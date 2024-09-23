@@ -9,6 +9,7 @@ import common from "../../styles/common.module.scss";
 import classNames from "classnames";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Login from "../Auth/Login";
 
 function NavbarComponent() {
   const pathname = usePathname();
@@ -29,46 +30,38 @@ function NavbarComponent() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
-            <Nav.Link active={pathname === "/"}>
-              <Link
-                href="/"
-                className={classNames({
-                  [styles.link]: true,
-                })}
-              >
-                Home
-              </Link>
-            </Nav.Link>
-            <Nav.Link active={pathname === "/borwse-reviews"}>
-              <Link
-                href="/browse-reviews"
-                className={classNames({
-                  [styles.link]: true,
-                })}
-              >
-                Browse Reviews
-              </Link>
-            </Nav.Link>
-            <Nav.Link active={pathname === "/submit-review"}>
-              <Link
-                href="/submit-review"
-                className={classNames({
-                  [styles.link]: true,
-                })}
-              >
-                Submit a Review
-              </Link>
-            </Nav.Link>
-            <Nav.Link active={pathname === "/login"}>
-              <Link
-                href="/login"
-                className={classNames({
-                  [styles.link]: true,
-                })}
-              >
-                Log in
-              </Link>
-            </Nav.Link>
+            <Link
+              href="/"
+              className={classNames({
+                [styles.link]: true,
+                "nav-link": true,
+                active: pathname === "/",
+              })}
+            >
+              Home
+            </Link>
+            <Link
+              href="/browse-reviews"
+              className={classNames({
+                [styles.link]: true,
+                "nav-link": true,
+                active: pathname === "/browse-review",
+              })}
+            >
+              Browse Reviews
+            </Link>
+            <Link
+              href="/submit-review"
+              className={classNames({
+                [styles.link]: true,
+                "nav-link": true,
+                active: pathname === "/submit-review",
+              })}
+            >
+              Submit a Review
+            </Link>
+
+            <Login />
             <Button
               variant="primary"
               className={classNames({
