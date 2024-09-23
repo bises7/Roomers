@@ -1,6 +1,5 @@
 "use client";
 
-import { NextPage } from "next";
 import Jumbotron from "./Jumbotron";
 import NavbarComponent from "../components/Common/Navbar";
 import { Col, Container, Row } from "react-bootstrap";
@@ -13,11 +12,7 @@ import { FaRegHandshake } from "react-icons/fa6";
 import Footer from "../components/Common/Footer";
 import Register from "../components/Auth/Register";
 
-interface Props {
-  classnames: string;
-}
-
-const Page: NextPage<Props> = ({}) => {
+const Page = ({}) => {
   return (
     <div>
       <NavbarComponent />
