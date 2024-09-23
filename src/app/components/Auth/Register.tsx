@@ -87,11 +87,17 @@ const Register: NextPage<Props> = ({ value }) => {
                   className="mt-3"
                   type={"checkbox"}
                   label="I accept the Terms and Conditions"
+                  onChange={(e) => {
+                    setTermsAndCondition(!e.target.checked);
+                  }}
+                  checked={termsAndCondition}
                 />
 
                 <Form.Check
                   type={"checkbox"}
                   label="I accept the Privacy Policy"
+                  onChange={(e) => setPrivacyPolicy(!e.target.checked)}
+                  checked={privacyPolicy}
                 />
 
                 <Button
