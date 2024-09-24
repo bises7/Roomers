@@ -39,7 +39,7 @@ const Page = () => {
                     [styles.blogsListImage]: true,
                   })}
                 />
-                <h6>{element.title}</h6>
+                <h6>{element.title.replace("'", "&apos;")}</h6>
               </div>
               <span
                 className={classNames({
@@ -48,7 +48,7 @@ const Page = () => {
                   [common.medium]: true,
                 })}
               >
-                {Date.now().toLocaleString()}
+                {Date.now().toLocaleString().replace("'", "&apos;")}
               </span>
             </Col>
           );
