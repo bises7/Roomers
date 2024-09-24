@@ -15,58 +15,70 @@ function NavbarComponent() {
   const pathname = usePathname();
 
   return (
-    <Navbar
-      expand="lg"
-      className={classNames({
-        "bg-body-tertiary": true,
-        [common.medium]: true,
-        [styles.whiteNav]: true,
-      })}
-    >
-      <Container fluid>
-        <Navbar.Brand href="/">
-          <Image src={logo} alt="Roomers logo" width={60} />
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ms-auto">
-            <Link
-              href="/"
-              className={classNames({
-                [styles.link]: true,
-                "nav-link": true,
-                active: pathname === "/",
-              })}
-            >
-              Home
-            </Link>
-            <Link
-              href="/browse-reviews"
-              className={classNames({
-                [styles.link]: true,
-                "nav-link": true,
-                active: pathname === "/browse-review",
-              })}
-            >
-              Browse Reviews
-            </Link>
-            <Link
-              href="/submit-review"
-              className={classNames({
-                [styles.link]: true,
-                "nav-link": true,
-                active: pathname === "/submit-review",
-              })}
-            >
-              Submit a Review
-            </Link>
+    <>
+      <Navbar
+        expand="lg"
+        className={classNames({
+          "bg-body-tertiary": true,
+          [common.medium]: true,
+          [styles.whiteNav]: true,
+        })}
+      >
+        <Container fluid>
+          <Navbar.Brand href="/">
+            <Image src={logo} alt="Roomers logo" width={60} />
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="ms-auto">
+              <Link
+                href="/"
+                className={classNames({
+                  [styles.link]: true,
+                  "nav-link": true,
+                  active: pathname === "/",
+                })}
+              >
+                Home
+              </Link>
+              <Link
+                href="/browse-reviews"
+                className={classNames({
+                  [styles.link]: true,
+                  "nav-link": true,
+                  active: pathname === "/browse-review",
+                })}
+              >
+                Browse Reviews
+              </Link>
+              <Link
+                href="/submit-review"
+                className={classNames({
+                  [styles.link]: true,
+                  "nav-link": true,
+                  active: pathname === "/submit-review",
+                })}
+              >
+                Submit a Review
+              </Link>
 
-            <Login classnames="" />
-            <Register value="Get Started" />
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+              <Login classnames="" />
+              <Register value="Get Started" />
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+        <hr
+          className={classNames({
+            [styles.navLine]: true,
+          })}
+        />
+      </Navbar>
+      <hr
+        className={classNames({
+          [styles.navLine]: true,
+        })}
+      />
+    </>
   );
 }
 

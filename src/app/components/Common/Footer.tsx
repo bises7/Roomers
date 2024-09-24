@@ -28,54 +28,16 @@ const Footer: NextPage<Props> = ({}) => {
         <Col>
           <span className="lead">
             <Link
-              href="/faq"
+              href="/blogs"
               className={classNames({
                 [styles.links]: true,
               })}
             >
-              <b>FAQ</b>
+              <b>Blogs</b>
             </Link>
           </span>
         </Col>
         <Col>
-          <span className="lead">
-            <Link
-              href="/blog"
-              className={classNames({
-                [styles.links]: true,
-              })}
-            >
-              <b>Blog</b>
-            </Link>
-          </span>
-        </Col>
-        <Col>
-          <span className="lead">
-            <Link
-              href="/contact"
-              className={classNames({
-                [styles.links]: true,
-              })}
-            >
-              <b>Contact Us</b>
-            </Link>
-          </span>
-        </Col>
-        <Col>
-          <span className="lead">
-            <Link
-              href="/terms-and-condition"
-              className={classNames({
-                [styles.links]: true,
-              })}
-            >
-              <b>Terms & Conditions</b>
-            </Link>
-          </span>
-        </Col>
-      </Row>
-      <Row className="mt-3">
-        <Col className="col-12 text-center">
           <span className="lead">
             <Link
               href="/privacy-policy"
@@ -87,8 +49,20 @@ const Footer: NextPage<Props> = ({}) => {
             </Link>
           </span>
         </Col>
+        <Col>
+          <span className="lead">
+            <Link
+              href="/terms-and-conditions"
+              className={classNames({
+                [styles.links]: true,
+              })}
+            >
+              <b>Terms & Conditions</b>
+            </Link>
+          </span>
+        </Col>
       </Row>
-      <Row className="mt-3">
+      <Row className="mt-4">
         <Col className="col-12 text-center text-muted">
           <Link
             href="/privacy-policy"
