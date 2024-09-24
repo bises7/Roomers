@@ -8,9 +8,11 @@ import Image from "next/image";
 import classNames from "classnames";
 import styles from "../styles/blogs.module.scss";
 import common from "../styles/common.module.scss";
+import PaginationComponent from "../components/Common/Pagination";
 
 const Page = ({}) => {
   const [blogs, setBlogs] = useState<JSX.Element[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     fetch("https://jsonplaceholder.typicode.com/posts")
@@ -55,10 +57,26 @@ const Page = ({}) => {
       });
   }, []);
 
+  const blogsPerPage = 18;
+
+  // Get current blogs based on the current page
+  const indexOfLastBlog = currentPage * blogsPerPage;
+  const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
+  const currentBlogs = blogs.slice(indexOfFirstBlog, indexOfLastBlog);
+
   return (
-    <div>
+    <div
+      className={classNames({
+        [styles.blogsPage]: true,
+      })}
+    >
       <NavbarComponent />
-      <Container className="mt-5">
+      <Container
+        className={classNames({
+          "mt-5": true,
+          [styles.blogsContainer]: true,
+        })}
+      >
         <h1>The Roomers Blog</h1>
         <span
           className={classNames({
@@ -69,8 +87,23 @@ const Page = ({}) => {
           company announcements
         </span>
 
-        <Row>{blogs}</Row>
+        <Row className="mt-4">{currentBlogs}</Row>
 
+        <div className="d-flex justify-content-center">
+          <PaginationComponent
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            itemsPerPage={blogsPerPage}
+            totalItems={blogs.length}
+            className="mt-5"
+          />
+        </div>
+      </Container>
+      <Container
+        className={classNames({
+          [styles.footerContainer]: true,
+        })}
+      >
         <Footer className="" />
       </Container>
     </div>
