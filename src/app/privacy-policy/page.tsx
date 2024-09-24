@@ -78,7 +78,7 @@ const Page = ({}) => {
           enforce our agreements.
         </p>
 
-        <h2>Children's Privacy</h2>
+        <h2>Children&apos;s Privacy</h2>
         <p>
           Our platform is not intended for children under the age of 18. We do
           not knowingly collect personal information from children.
