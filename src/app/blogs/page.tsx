@@ -10,7 +10,7 @@ import styles from "../styles/blogs.module.scss";
 import common from "../styles/common.module.scss";
 import PaginationComponent from "../components/Common/Pagination";
 
-const Page = ({}) => {
+const Page = () => {
   const [blogs, setBlogs] = useState<JSX.Element[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
