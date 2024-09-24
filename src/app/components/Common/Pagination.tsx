@@ -1,6 +1,8 @@
+import classNames from "classnames";
 import { NextPage } from "next";
 import { Dispatch, SetStateAction } from "react";
 import { Pagination } from "react-bootstrap";
+import styles from "../../styles/pagination.module.scss";
 
 interface Props {
   totalItems: number;
@@ -35,6 +37,9 @@ const PaginationComponent: NextPage<Props> = ({
           key={idx + 1}
           active={currentPage === idx + 1}
           onClick={() => handlePageChange(idx + 1)}
+          className={classNames({
+            [styles.paginationItem]: true,
+          })}
         >
           {idx + 1}
         </Pagination.Item>

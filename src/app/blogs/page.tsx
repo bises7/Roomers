@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import classNames from "classnames";
 import styles from "../styles/blogs.module.scss";
+import paginationStyles from "../styles/pagination.module.scss";
 import common from "../styles/common.module.scss";
 import PaginationComponent from "../components/Common/Pagination";
 
@@ -95,7 +96,10 @@ const Page = () => {
             setCurrentPage={setCurrentPage}
             itemsPerPage={blogsPerPage}
             totalItems={blogs.length}
-            className="mt-5"
+            className={classNames({
+              "mt-5": true,
+              [paginationStyles.pagination]: true,
+            })}
           />
         </div>
       </Container>
