@@ -1,13 +1,10 @@
 "use client";
 
-import { NextPage } from "next";
 import NavbarComponent from "../components/Common/Navbar";
 import { Container } from "react-bootstrap";
 import Footer from "../components/Common/Footer";
 
-interface Props {}
-
-const Page: NextPage<Props> = ({}) => {
+const Page = ({}) => {
   return (
     <>
       <NavbarComponent />
