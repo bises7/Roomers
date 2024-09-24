@@ -1,11 +1,12 @@
 import { NextPage } from "next";
+import { Dispatch, SetStateAction } from "react";
 import { Pagination } from "react-bootstrap";
 
 interface Props {
   totalItems: number;
   currentPage: number;
   itemsPerPage: number;
-  setCurrentPage: (pageNumber: number) => {};
+  setCurrentPage: Dispatch<SetStateAction<number>>;
   className: string;
 }
 
