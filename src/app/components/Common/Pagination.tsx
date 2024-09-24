@@ -1,12 +1,11 @@
 import { NextPage } from "next";
-import { useState } from "react";
 import { Pagination } from "react-bootstrap";
 
 interface Props {
   totalItems: number;
   currentPage: number;
   itemsPerPage: number;
-  setCurrentPage: Function;
+  setCurrentPage: (pageNumber: number) => {};
   className: string;
 }
 
@@ -20,7 +19,7 @@ const PaginationComponent: NextPage<Props> = ({
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   // Function to handle page change
-  const handlePageChange = (pageNumber: number) => {
+  const handlePageChange = (pageNumber: number): void => {
     setCurrentPage(pageNumber);
   };
 

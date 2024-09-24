@@ -12,13 +12,13 @@ import PaginationComponent from "../components/Common/Pagination";
 
 const Page = ({}) => {
   const [blogs, setBlogs] = useState<JSX.Element[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   useEffect(() => {
     fetch("https://jsonplaceholder.typicode.com/posts")
       .then((response) => response.json())
       .then((json) => {
-        let newBlogs: JSX.Element[] = [];
+        const newBlogs: JSX.Element[] = [];
         json.forEach((element: { title: string }) => {
           newBlogs.push(
             <Col
