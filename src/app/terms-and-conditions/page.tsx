@@ -63,10 +63,11 @@ const Page = ({}) => {
 
         <h2>Limitation of Liability</h2>
         <p>
-          Roomers.space is provided "as is" and "as available." We make no
-          warranties, express or implied, regarding the site's operation or the
-          information provided. Roomers.space will not be liable for any damages
-          arising from your use of the platform.
+          Roomers.space is provided &quot;as is&quot; and &quot;as
+          available.&quot; We make no warranties, express or implied, regarding
+          the site&apos;s operation or the information provided. Roomers.space
+          will not be liable for any damages arising from your use of the
+          platform.
         </p>
 
         <h2>Governing Law</h2>
