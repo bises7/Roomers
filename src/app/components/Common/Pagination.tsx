@@ -3,6 +3,7 @@ import { NextPage } from "next";
 import { Dispatch, SetStateAction } from "react";
 import { Pagination } from "react-bootstrap";
 import styles from "../../styles/pagination.module.scss";
+import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 
 interface Props {
   totalItems: number;
@@ -28,26 +29,40 @@ const PaginationComponent: NextPage<Props> = ({
 
   return (
     <Pagination className={className}>
-      <Pagination.Prev
-        onClick={() => handlePageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-      />
+      <span
+        className={classNames({
+          [styles.changeButton]: true,
+        })}
+        onClick={() => {
+          if (currentPage !== 1) handlePageChange(currentPage - 1);
+        }}
+      >
+        <GrFormPrevious />
+      </span>
       {Array.from({ length: totalPages }, (_, idx) => (
         <Pagination.Item
           key={idx + 1}
           active={currentPage === idx + 1}
           onClick={() => handlePageChange(idx + 1)}
           className={classNames({
-            [styles.paginationItem]: true,
+            [styles.active]: currentPage === idx + 1,
           })}
         >
           {idx + 1}
         </Pagination.Item>
       ))}
-      <Pagination.Next
-        onClick={() => handlePageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-      />
+      <span
+        className={classNames({
+          [styles.changeButton]: true,
+        })}
+        onClick={() => {
+          if (currentPage !== totalPages) {
+            handlePageChange(currentPage + 1);
+          }
+        }}
+      >
+        <GrFormNext />
+      </span>
     </Pagination>
   );
 };

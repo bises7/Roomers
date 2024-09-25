@@ -1,3 +1,4 @@
+/* Pagination.module.css */
 .pagination {
   display: flex;
   justify-content: center;
@@ -5,13 +6,13 @@
   gap: 10px;
 }
 
-.paginationItem {
+.pagination li {
   border: none;
   background: none;
   margin: 0;
 }
 
-.paginationItem a.page-link {
+.pagination li a {
   color: #333; /* Default text color */
   border: none;
   padding: 8px 12px;
@@ -19,33 +20,30 @@
   background-color: transparent;
 }
 
-.paginationItem.active a.page-link {
-  background-color: #f1f3f5; /* Light gray background for active */
-  color: black;
+.active span {
+  background-color: #f1f3f5 !important; /* Light gray background for active */
+  color: black !important;
+  border-color: #f1f3f5 !important;
   border-radius: 50%; /* Make the active item a circle */
+  transform: scale(1.1);
 }
 
-.paginationItem a.page-link:hover {
+.pagination li a:hover {
   text-decoration: none;
-  background-color: rgba(0, 0, 0, 0.1); /* Hover effect */
-  border-radius: 50%;
+  transform: scale(1.06);
 }
 
-.paginationItem.disabled a.page-link {
+.pagination li.disabled a {
   color: #ccc; /* Disabled color for prev/next buttons */
 }
-
-.paginationItem:first-of-type a.page-link::before {
-  content: "‹"; /* Left arrow */
-  font-size: 20px;
-}
-
-.paginationItem:last-of-type a.page-link::after {
-  content: "›"; /* Right arrow */
-  font-size: 20px;
-}
-
-.paginationItem a.page-link {
+.pagination li a {
   padding: 8px;
-  border: none !important;
+}
+
+.changeButton {
+  cursor: pointer;
+}
+
+.changeButton:hover {
+  transform: scale(1.3);
 }

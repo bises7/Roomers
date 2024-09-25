@@ -32,6 +32,8 @@ const Page = ({}) => {
               [common.medium]: true,
             })}
             href="https://www.shakyabisesh.com"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             Bisesh Shakya
           </a>{" "}
@@ -40,21 +42,31 @@ const Page = ({}) => {
         </span>
 
         <h4 className="mt-3">Behind Roomers.space</h4>
-        <h5>Bisesh Shakya</h5>
         <span
           className={classNames({
             [common.medium]: true,
             "text-muted": true,
           })}
         >
-          Bisesh Shakya is the founder, designer, and developer of
-          Roomers.space, a platform dedicated to improving the rental experience
-          by connecting renters with trustworthy landlords. With a background at
-          Diagonal Technologies and IntelliFi, Bisesh leveraged his expertise in
-          software development and financial technology to create a user-centric
-          website that addresses the complexities of the rental market. His work
-          at Roomers.space represents not just a business venture but a
-          commitment to enhancing transparency and fairness in renting.
+          <a
+            className={classNames({
+              [footerStyles.links]: true,
+              [common.medium]: true,
+            })}
+            href="https://www.shakyabisesh.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Bisesh Shakya
+          </a>{" "}
+          is the founder, designer, and developer of Roomers.space, a platform
+          dedicated to improving the rental experience by connecting renters
+          with trustworthy landlords. With a background at Diagonal Technologies
+          and IntelliFi, Bisesh leveraged his expertise in software development
+          and financial technology to create a user-centric website that
+          addresses the complexities of the rental market. His work at
+          Roomers.space represents not just a business venture but a commitment
+          to enhancing transparency and fairness in renting.
         </span>
 
         <h4 className="mt-3">Our Values</h4>
