@@ -42,11 +42,11 @@ function NavbarComponent() {
                 Home
               </Link>
               <Link
-                href="/browse-reviews"
+                href="/review"
                 className={classNames({
                   [styles.link]: true,
                   "nav-link": true,
-                  active: pathname === "/browse-review",
+                  active: pathname === "/review",
                 })}
               >
                 Browse Reviews
