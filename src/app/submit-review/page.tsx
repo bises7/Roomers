@@ -22,7 +22,7 @@ const Page: NextPage<Props> = ({}) => {
   const [starHoverNumber, setStarHoverNumber] = useState<number>(0);
   const [keywords, setKeywords] = useState<string>("");
 
-  const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+  const { getRootProps, getInputProps } = useDropzone({
     disabled: false,
   });
 
