@@ -1,6 +1,5 @@
 "use client";
 
-import { NextPage } from "next";
 import NavbarComponent from "../components/Common/Navbar";
 import { Button, Container, Form } from "react-bootstrap";
 import searchbarStyles from "../styles/searchbar.module.scss";
@@ -12,11 +11,7 @@ import styles from "../styles/review.module.scss";
 import { RiStarFill, RiStarLine } from "react-icons/ri";
 import { useDropzone } from "react-dropzone";
 
-interface Props {
-  className: string;
-}
-
-const Page: NextPage<Props> = ({}) => {
+const Page = ({}) => {
   const [landlordName, setLandlordName] = useState<string>("");
   const [propertyAddress, setPropertyAddress] = useState<string>("");
   const [starHoverNumber, setStarHoverNumber] = useState<number>(0);
