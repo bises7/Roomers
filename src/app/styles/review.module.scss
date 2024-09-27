@@ -1,0 +1,12 @@
+.star {
+  cursor: pointer;
+}
+
+.container {
+  border: dashed;
+  border-color: #f0f2f5;
+  border-width: 3px;
+  border-radius: 12px;
+  outline: none;
+  transition: "border .24s ease-in-out";
+}
