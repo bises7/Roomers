@@ -11,6 +11,43 @@ import styles from "../styles/review.module.scss";
 import { RiStarFill, RiStarLine } from "react-icons/ri";
 import { useDropzone } from "react-dropzone";
 
+const thumbsContainer: {} = {
+  display: "flex",
+  flexDirection: "row",
+  flexWrap: "wrap",
+  marginTop: 16,
+};
+
+const thumb: {} = {
+  display: "flex",
+  justifyContent: "center",
+  borderRadius: 2,
+  border: "1px solid #eaeaea",
+  marginBottom: 8,
+  marginRight: 8,
+  width: 100,
+  height: 100,
+  padding: 4,
+  boxSizing: "border-box",
+};
+
+const thumbInner: {} = {
+  display: "flex",
+  minWidth: 0,
+  overflow: "hidden",
+};
+
+const img: {} = {
+  display: "block",
+  width: "auto",
+  height: "100%",
+};
+
+interface FileWithPreview {
+  name: string;
+  preview: string; // Assuming preview is a URL string
+}
+
 const Page = ({}) => {
   const [landlordName, setLandlordName] = useState<string>("");
   const [propertyAddress, setPropertyAddress] = useState<string>("");
@@ -19,13 +56,32 @@ const Page = ({}) => {
 
   const { getRootProps, getInputProps } = useDropzone({
     disabled: false,
+    onDrop: (acceptedFiles) => {
+      setFiles(
+        acceptedFiles.map((file) =>
+          Object.assign(file, {
+            preview: URL.createObjectURL(file),
+          })
+        )
+      );
+    },
   });
 
-  // const files = acceptedFiles.map((file) => (
-  //   <li key={file.name}>
-  //     {file.name} - {file.size} bytes
-  //   </li>
-  // ));
+  const [files, setFiles] = useState<FileWithPreview[]>([]);
+
+  const thumbs = files.map((file) => (
+    <div style={thumb} key={file.name}>
+      <div style={thumbInner}>
+        <img
+          src={file.preview}
+          style={img}
+          onLoad={() => {
+            URL.revokeObjectURL(file.preview);
+          }}
+        />
+      </div>
+    </div>
+  ));
 
   return (
     <div>
@@ -201,6 +257,8 @@ const Page = ({}) => {
             </Button>
           </div>
         </section>
+
+        <aside style={thumbsContainer}>{thumbs}</aside>
 
         <div className="d-flex justify-content-end my-4">
           <div>
