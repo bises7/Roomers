@@ -12,7 +12,9 @@ import styles from "../styles/review.module.scss";
 import { RiStarFill, RiStarLine } from "react-icons/ri";
 import { useDropzone } from "react-dropzone";
 
-interface Props {}
+interface Props {
+  className: string;
+}
 
 const Page: NextPage<Props> = ({}) => {
   const [landlordName, setLandlordName] = useState<string>("");
@@ -24,11 +26,11 @@ const Page: NextPage<Props> = ({}) => {
     disabled: false,
   });
 
-  const files = acceptedFiles.map((file) => (
-    <li key={file.name}>
-      {file.name} - {file.size} bytes
-    </li>
-  ));
+  // const files = acceptedFiles.map((file) => (
+  //   <li key={file.name}>
+  //     {file.name} - {file.size} bytes
+  //   </li>
+  // ));
 
   return (
     <div>
