@@ -48,7 +48,7 @@ interface FileWithPreview {
   preview: string; // Assuming preview is a URL string
 }
 
-const Page = (object) => {
+const Page = () => {
   const [landlordName, setLandlordName] = useState<string>("");
   const [propertyAddress, setPropertyAddress] = useState<string>("");
   const [starHoverNumber, setStarHoverNumber] = useState<number>(0);
