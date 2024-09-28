@@ -17,7 +17,7 @@ import Footer from "@/app/components/Common/Footer";
 
 const Page = ({}) => {
   const getStar = (stars: number) => {
-    let starIcons = [];
+    const starIcons = [];
     for (let i = 0; i < stars; i++) {
       starIcons.push(<RiStarFill />);
     }
@@ -107,7 +107,7 @@ const Page = ({}) => {
             <span className="text-muted">June 10,2023</span> <br />
             {getStar(4)}
             <p>
-              Johanaa is the best landlord I've ever had. She's always
+              Johanaa is the best landlord I&apos;ve ever had. She&apos;s always
               responsive and get things fixed right away. The building is well
               maintained and in a great location. Highly recommend.
             </p>
@@ -117,7 +117,7 @@ const Page = ({}) => {
             <span className="text-muted">June 10,2023</span> <br />
             {getStar(4)}
             <p>
-              Johanaa is the best landlord I've ever had. She's always
+              Johanaa is the best landlord I&apos;ve ever had. She&apos;s always
               responsive and get things fixed right away. The building is well
               maintained and in a great location. Highly recommend.
             </p>
@@ -127,7 +127,7 @@ const Page = ({}) => {
             <span className="text-muted">June 10,2023</span> <br />
             {getStar(4)}
             <p>
-              Johanaa is the best landlord I've ever had. She's always
+              Johanaa is the best landlord I&apos;ve ever had. She&apos;s always
               responsive and get things fixed right away. The building is well
               maintained and in a great location. Highly recommend.
             </p>

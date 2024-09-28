@@ -11,14 +11,14 @@ import styles from "../styles/review.module.scss";
 import { RiStarFill, RiStarLine } from "react-icons/ri";
 import { useDropzone } from "react-dropzone";
 
-const thumbsContainer: {} = {
+const thumbsContainer: object = {
   display: "flex",
   flexDirection: "row",
   flexWrap: "wrap",
   marginTop: 16,
 };
 
-const thumb: {} = {
+const thumb: object = {
   display: "flex",
   justifyContent: "center",
   borderRadius: 2,
@@ -31,13 +31,13 @@ const thumb: {} = {
   boxSizing: "border-box",
 };
 
-const thumbInner: {} = {
+const thumbInner: object = {
   display: "flex",
   minWidth: 0,
   overflow: "hidden",
 };
 
-const img: {} = {
+const img: object = {
   display: "block",
   width: "auto",
   height: "100%",
@@ -48,7 +48,7 @@ interface FileWithPreview {
   preview: string; // Assuming preview is a URL string
 }
 
-const Page = ({}) => {
+const Page = (object) => {
   const [landlordName, setLandlordName] = useState<string>("");
   const [propertyAddress, setPropertyAddress] = useState<string>("");
   const [starHoverNumber, setStarHoverNumber] = useState<number>(0);
