@@ -10,6 +10,7 @@ import { useState } from "react";
 import styles from "../styles/review.module.scss";
 import { RiStarFill, RiStarLine } from "react-icons/ri";
 import { useDropzone } from "react-dropzone";
+import Image from "next/image";
 
 const thumbsContainer: object = {
   display: "flex",
@@ -72,12 +73,15 @@ const Page = () => {
   const thumbs = files.map((file) => (
     <div style={thumb} key={file.name}>
       <div style={thumbInner}>
-        <img
+        <Image
           src={file.preview}
           style={img}
           onLoad={() => {
             URL.revokeObjectURL(file.preview);
           }}
+          alt="thumbs"
+          width={30}
+          height={30}
         />
       </div>
     </div>

@@ -29,7 +29,7 @@ function NavbarComponent() {
     });
 
     return () => unsubscribe(); // Cleanup subscription on unmount
-  }, []);
+  }, [auth]);
 
   const handleSignOut = () => {
     signOut(auth)
