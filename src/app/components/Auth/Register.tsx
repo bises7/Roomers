@@ -25,11 +25,6 @@ interface Props {
 
 const Register: NextPage<Props> = ({ value }) => {
   const [show, setShow] = useState(false);
-  const [error, setError] = useState<string>("");
-
-  if (error) {
-    console.log(error);
-  }
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -61,9 +56,8 @@ const Register: NextPage<Props> = ({ value }) => {
       );
       console.log("User registered:", userCredential.user);
       handleClose(); // Close the modal on successful registration
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error signing up:", error);
-      setError(error.message); // Display error message to the user
     }
   };
 
