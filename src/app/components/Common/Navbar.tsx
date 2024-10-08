@@ -10,9 +10,36 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Login from "../Auth/Login";
 import Register from "../Auth/Register";
+import { useState, useEffect } from "react";
+import { getAuth, onAuthStateChanged, signOut, User } from "firebase/auth";
+import app from "../../../../firebase/firebaseConfig";
 
 function NavbarComponent() {
   const pathname = usePathname();
+  const [user, setUser] = useState<User | null>(null);
+  const auth = getAuth(app);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+      }
+    });
+
+    return () => unsubscribe(); // Cleanup subscription on unmount
+  }, []);
+
+  const handleSignOut = () => {
+    signOut(auth)
+      .then(() => {
+        console.log("User signed out successfully");
+      })
+      .catch((error) => {
+        console.error("Sign out error:", error);
+      });
+  };
 
   return (
     <>
@@ -62,8 +89,14 @@ function NavbarComponent() {
                 Submit a Review
               </Link>
 
-              <Login classnames="" />
-              <Register value="Get Started" />
+              {user ? (
+                <Nav.Link onClick={handleSignOut}>Sign Out</Nav.Link>
+              ) : (
+                <>
+                  <Login classnames="" />
+                  <Register value="Get Started" />
+                </>
+              )}
             </Nav>
           </Navbar.Collapse>
         </Container>

@@ -1,4 +1,4 @@
-import classNames from "classnames";
+import React, { useState } from "react";
 import { NextPage } from "next";
 import {
   Button,
@@ -7,27 +7,74 @@ import {
   FormControl,
   FormLabel,
   Modal,
-  Nav,
   Row,
+  Nav,
 } from "react-bootstrap";
-import { useState } from "react";
+import { Formik, Field } from "formik";
+import * as Yup from "yup";
+import classNames from "classnames";
 import navbarStyles from "../../styles/navbar.module.scss";
 import common from "../../styles/common.module.scss";
 import searchBarStyles from "../../styles/searchbar.module.scss";
 import styles from "../../styles/auth.module.scss";
 import { BsApple, BsFacebook, BsGoogle } from "react-icons/bs";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import app from "../../../../firebase/firebaseConfig";
+import { FormikHelpers } from "formik";
 
 interface Props {
   classnames: string;
 }
+interface LoginFormValues {
+  email: string;
+  password: string;
+}
 
-const Login: NextPage<Props> = ({}) => {
+const Login: NextPage<Props> = ({ classnames }) => {
   const [show, setShow] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  // Validation schema using Yup
+  const validationSchema = Yup.object().shape({
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
+    password: Yup.string()
+      .min(8, "Password must be at least 8 characters long")
+      .required("Password is required"),
+  });
+
+  const loginUser = async (
+    email: string,
+    password: string,
+    setFieldError: FormikHelpers<LoginFormValues>["setFieldError"]
+  ) => {
+    const auth = getAuth(app);
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      console.log("User logged in:", userCredential.user);
+      handleClose(); // Close the modal on successful login
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message.includes("auth/invalid-credential")) {
+          setFieldError("password", "Invalid Credentials");
+          setFieldError("email", "Invalid Credentials");
+        } else {
+          setError("Login failed. Please try again.");
+        }
+      } else {
+        console.error("Unexpected error:", error);
+        setError("An unexpected error occurred.");
+      }
+    }
+  };
 
   return (
     <>
@@ -49,121 +96,104 @@ const Login: NextPage<Props> = ({}) => {
             </span>
           </div>
 
-          <Row className="mt-4">
-            <Col sm={{ span: 6, offset: 3 }}>
-              <Form>
-                <FormLabel>Email</FormLabel>
-                <FormControl
-                  className={classNames({
-                    [searchBarStyles.searchInput]: true,
-                    [styles.input]: true,
-                    "ps-2": true,
-                  })}
-                  type="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  formNoValidate
-                />
+          <Formik
+            initialValues={{ email: "", password: "" }}
+            validationSchema={validationSchema}
+            onSubmit={(values, { setSubmitting, setFieldError }) => {
+              loginUser(values.email, values.password, setFieldError);
+              setSubmitting(false);
+            }}
+          >
+            {({
+              handleSubmit,
+              handleChange,
+              handleBlur,
+              values,
+              touched,
+              errors,
+            }) => (
+              <Form noValidate onSubmit={handleSubmit}>
+                <Row className="mt-4">
+                  <Col sm={{ span: 6, offset: 3 }}>
+                    <Form.Group>
+                      <FormLabel>Email</FormLabel>
+                      <Field
+                        name="email"
+                        type="email"
+                        as={FormControl}
+                        placeholder="Email"
+                        className={classNames(
+                          searchBarStyles.searchInput,
+                          styles.input,
+                          "ps-2"
+                        )}
+                        isInvalid={touched.email && !!errors.email}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.email}
+                      </Form.Control.Feedback>
+                    </Form.Group>
 
-                <FormLabel>Password</FormLabel>
-                <FormControl
-                  className={classNames({
-                    [searchBarStyles.searchInput]: true,
-                    [styles.input]: true,
-                    "ps-2": true,
-                  })}
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  formNoValidate
-                />
+                    <Form.Group>
+                      <FormLabel>Password</FormLabel>
+                      <Field
+                        name="password"
+                        type="password"
+                        as={FormControl}
+                        placeholder="Password"
+                        className={classNames(
+                          searchBarStyles.searchInput,
+                          styles.input,
+                          "ps-2"
+                        )}
+                        isInvalid={touched.password && !!errors.password}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.password}
+                      </Form.Control.Feedback>
+                    </Form.Group>
 
-                <Button
-                  variant="primary"
-                  className={classNames({
-                    "mt-4 w-100": true,
-                    [common.button]: true,
-                    [common.skyblue]: true,
-                  })}
-                >
-                  Sign In
-                </Button>
+                    <Button
+                      variant="primary"
+                      type="submit"
+                      className={classNames(
+                        "mt-4 w-100",
+                        common.button,
+                        common.skyblue
+                      )}
+                    >
+                      Sign In
+                    </Button>
+                  </Col>
+                </Row>
               </Form>
-            </Col>
-          </Row>
+            )}
+          </Formik>
 
           <div className="text-center mt-3">
-            <small
-              className={classNames({
-                "text-muted": true,
-                [styles.link]: true,
-              })}
-            >
+            <small className={classNames("text-muted", styles.link)}>
               Forgot your password?
             </small>
             <br />
             <small className="text-muted">
               New to Roomers Space?{" "}
-              <span
-                className={classNames({
-                  "text-muted": true,
-                  [styles.link]: true,
-                })}
-              >
+              <span className={classNames("text-muted", styles.link)}>
                 Sign up
               </span>
             </small>
           </div>
           <Row className="mt-4">
-            <Col
-              className={classNames({
-                "border p-2 ps-3 me-2": true,
-                [styles.oAuth]: true,
-              })}
-            >
+            <Col className={classNames("border p-2 ps-3 me-2", styles.oAuth)}>
               <BsFacebook className="mb-1" />
-              &nbsp;
-              <span
-                className={classNames({
-                  [common.medium]: true,
-                })}
-              >
-                Facebook
-              </span>
+              <span className={classNames(common.medium)}> Facebook</span>
             </Col>
-            <Col
-              className={classNames({
-                "border p-2 ps-3 me-2": true,
-                [styles.oAuth]: true,
-              })}
-            >
+            <Col className={classNames("border p-2 ps-3 me-2", styles.oAuth)}>
               <BsGoogle className="mb-1" />
-              &nbsp;
-              <span
-                className={classNames({
-                  [common.medium]: true,
-                })}
-              >
-                Google
-              </span>
+              <span className={classNames(common.medium)}> Google</span>
             </Col>
-            <Col
-              className={classNames({
-                "border p-2 ps-3 me-2": true,
-                [styles.oAuth]: true,
-              })}
-            >
+            <Col className={classNames("border p-2 ps-3 me-2", styles.oAuth)}>
               <BsApple className="mb-1" />
-              &nbsp;
-              <span
-                className={classNames({
-                  [common.medium]: true,
-                })}
-              >
-                Apple
-              </span>
+              <span className={classNames(common.medium)}> Apple</span>
             </Col>
           </Row>
         </Modal.Body>
