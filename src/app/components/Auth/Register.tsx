@@ -1,4 +1,4 @@
-import classNames from "classnames";
+import React, { useState } from "react";
 import { NextPage } from "next";
 import {
   Button,
@@ -9,11 +9,15 @@ import {
   Modal,
   Row,
 } from "react-bootstrap";
-import { useState } from "react";
+import { Formik, Field } from "formik";
+import * as Yup from "yup";
+import classNames from "classnames";
 import common from "../../styles/common.module.scss";
 import searchBarStyles from "../../styles/searchbar.module.scss";
 import styles from "../../styles/auth.module.scss";
 import { BsApple, BsFacebook, BsGoogle } from "react-icons/bs";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import app from "../../../../firebase/firebaseConfig";
 
 interface Props {
   value: string;
@@ -21,13 +25,43 @@ interface Props {
 
 const Register: NextPage<Props> = ({ value }) => {
   const [show, setShow] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [termsAndCondition, setTermsAndCondition] = useState(false);
-  const [privacyPolicy, setPrivacyPolicy] = useState(false);
+  const [error, setError] = useState<string>("");
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const validationSchema = Yup.object().shape({
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
+    password: Yup.string()
+      .min(8, "Password must be at least 8 characters long")
+      .required("Password is required"),
+    termsAndCondition: Yup.boolean().oneOf(
+      [true],
+      "You must accept the Terms and Conditions"
+    ),
+    privacyPolicy: Yup.boolean().oneOf(
+      [true],
+      "You must accept the Privacy Policy"
+    ),
+  });
+
+  const createUser = async (email: string, password: string) => {
+    const auth = getAuth(app);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      console.log("User registered:", userCredential.user);
+      handleClose(); // Close the modal on successful registration
+    } catch (error: any) {
+      console.error("Error signing up:", error);
+      setError(error.message); // Display error message to the user
+    }
+  };
 
   return (
     <>
@@ -52,132 +86,142 @@ const Register: NextPage<Props> = ({ value }) => {
             </span>
           </div>
 
-          <Row className="mt-4">
-            <Col sm={{ span: 6, offset: 3 }}>
-              <Form>
-                <FormLabel>Email</FormLabel>
-                <FormControl
-                  className={classNames({
-                    [searchBarStyles.searchInput]: true,
-                    [styles.input]: true,
-                    "ps-2": true,
-                  })}
-                  type="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  formNoValidate
-                />
+          <Formik
+            initialValues={{
+              email: "",
+              password: "",
+              termsAndCondition: false,
+              privacyPolicy: false,
+            }}
+            validationSchema={validationSchema}
+            onSubmit={({ email, password }, { setSubmitting }) => {
+              createUser(email, password);
+              setSubmitting(false);
+              handleClose();
+            }}
+          >
+            {({
+              handleSubmit,
+              handleChange,
+              handleBlur,
+              values,
+              touched,
+              errors,
+            }) => (
+              <Form noValidate onSubmit={handleSubmit}>
+                <Row className="mt-4">
+                  <Col sm={{ span: 6, offset: 3 }}>
+                    <Form.Group>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl
+                        as={Field}
+                        name="email"
+                        type="email"
+                        placeholder="Enter email"
+                        className={classNames(
+                          searchBarStyles.searchInput,
+                          styles.input,
+                          "ps-2"
+                        )}
+                        isInvalid={touched.email && !!errors.email}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.email}
+                      </Form.Control.Feedback>
+                    </Form.Group>
 
-                <FormLabel>Password</FormLabel>
-                <FormControl
-                  className={classNames({
-                    [searchBarStyles.searchInput]: true,
-                    [styles.input]: true,
-                    "ps-2": true,
-                  })}
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  formNoValidate
-                />
+                    <Form.Group>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl
+                        as={Field}
+                        name="password"
+                        type="password"
+                        placeholder="Enter password"
+                        className={classNames(
+                          searchBarStyles.searchInput,
+                          styles.input,
+                          "ps-2"
+                        )}
+                        isInvalid={touched.password && !!errors.password}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.password}
+                      </Form.Control.Feedback>
+                    </Form.Group>
 
-                <Form.Check
-                  className="mt-3"
-                  type={"checkbox"}
-                  label="I accept the Terms and Conditions"
-                  onChange={(e) => {
-                    setTermsAndCondition(!e.target.checked);
-                  }}
-                  checked={termsAndCondition}
-                />
+                    <Form.Group className="mt-3">
+                      <Form.Check
+                        name="termsAndCondition"
+                        label="I accept the Terms and Conditions"
+                        onChange={handleChange}
+                        isInvalid={
+                          touched.termsAndCondition &&
+                          !!errors.termsAndCondition
+                        }
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.termsAndCondition}
+                      </Form.Control.Feedback>
+                    </Form.Group>
 
-                <Form.Check
-                  type={"checkbox"}
-                  label="I accept the Privacy Policy"
-                  onChange={(e) => setPrivacyPolicy(!e.target.checked)}
-                  checked={privacyPolicy}
-                />
+                    <Form.Group>
+                      <Form.Check
+                        name="privacyPolicy"
+                        label="I accept the Privacy Policy"
+                        onChange={handleChange}
+                        isInvalid={
+                          touched.privacyPolicy && !!errors.privacyPolicy
+                        }
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.privacyPolicy}
+                      </Form.Control.Feedback>
+                    </Form.Group>
 
-                <Button
-                  variant="primary"
-                  className={classNames({
-                    "mt-4 w-100": true,
-                    [common.button]: true,
-                    [common.skyblue]: true,
-                  })}
-                >
-                  Sign Up
-                </Button>
+                    <Button
+                      variant="primary"
+                      type="submit"
+                      className={classNames(
+                        "mt-4 w-100",
+                        common.button,
+                        common.skyblue
+                      )}
+                    >
+                      Sign Up
+                    </Button>
+                  </Col>
+                </Row>
+                <div className="text-center mt-4">
+                  <small className="text-muted">
+                    Already have an account?{" "}
+                    <span className={classNames(styles.link, "text-muted")}>
+                      Sign in
+                    </span>
+                  </small>
+                </div>
+                <Row className="mt-4">
+                  <Col
+                    className={classNames("border p-2 ps-3 me-2", styles.oAuth)}
+                  >
+                    <BsFacebook className="mb-1" />
+                    <span className={classNames(common.medium)}> Facebook</span>
+                  </Col>
+                  <Col
+                    className={classNames("border p-2 ps-3 me-2", styles.oAuth)}
+                  >
+                    <BsGoogle className="mb-1" />
+                    <span className={classNames(common.medium)}> Google</span>
+                  </Col>
+                  <Col
+                    className={classNames("border p-2 ps-3 me-2", styles.oAuth)}
+                  >
+                    <BsApple className="mb-1" />
+                    <span className={classNames(common.medium)}> Apple</span>
+                  </Col>
+                </Row>
               </Form>
-            </Col>
-          </Row>
-
-          <div className="text-center">
-            <br />
-            <small className="text-muted">
-              Already have an account?&nbsp;
-              <span
-                className={classNames({
-                  "text-muted": true,
-                  [styles.link]: true,
-                })}
-              >
-                Sign in
-              </span>
-            </small>
-          </div>
-          <Row className="mt-4">
-            <Col
-              className={classNames({
-                "border p-2 ps-3 me-2": true,
-                [styles.oAuth]: true,
-              })}
-            >
-              <BsFacebook className="mb-1" />
-              &nbsp;
-              <span
-                className={classNames({
-                  [common.medium]: true,
-                })}
-              >
-                Facebook
-              </span>
-            </Col>
-            <Col
-              className={classNames({
-                "border p-2 ps-3 me-2": true,
-                [styles.oAuth]: true,
-              })}
-            >
-              <BsGoogle className="mb-1" />
-              &nbsp;
-              <span
-                className={classNames({
-                  [common.medium]: true,
-                })}
-              >
-                Google
-              </span>
-            </Col>
-            <Col
-              className={classNames({
-                "border p-2 ps-3 me-2": true,
-                [styles.oAuth]: true,
-              })}
-            >
-              <BsApple className="mb-1" />
-              &nbsp;
-              <span
-                className={classNames({
-                  [common.medium]: true,
-                })}
-              >
-                Apple
-              </span>
-            </Col>
-          </Row>
+            )}
+          </Formik>
         </Modal.Body>
       </Modal>
     </>

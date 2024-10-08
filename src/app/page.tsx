@@ -9,7 +9,7 @@ import TopRated from "./components/Homepage/TopRated";
 import HowItWorks from "./components/Homepage/HowItWorks";
 import RecentReviews from "./components/Homepage/RecentReviews";
 import WhyRoomers from "./components/Homepage/WhyRoomers";
-import HeplUs from "./components/Homepage/HeplUs";
+import HelpUs from "./components/Homepage/HeplUs";
 import Footer from "./components/Common/Footer";
 
 export default function Home() {
@@ -28,7 +28,7 @@ export default function Home() {
         <HowItWorks className="" />
         <RecentReviews className="" />
         <WhyRoomers className="" />
-        <HeplUs className="" />
+        <HelpUs className="" />
         <Footer className="" />
       </Container>
     </>
