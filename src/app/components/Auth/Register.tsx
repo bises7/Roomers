@@ -27,6 +27,10 @@ const Register: NextPage<Props> = ({ value }) => {
   const [show, setShow] = useState(false);
   const [error, setError] = useState<string>("");
 
+  if (error) {
+    console.log(error);
+  }
+
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -100,14 +104,7 @@ const Register: NextPage<Props> = ({ value }) => {
               handleClose();
             }}
           >
-            {({
-              handleSubmit,
-              handleChange,
-              handleBlur,
-              values,
-              touched,
-              errors,
-            }) => (
+            {({ handleSubmit, handleChange, touched, errors }) => (
               <Form noValidate onSubmit={handleSubmit}>
                 <Row className="mt-4">
                   <Col sm={{ span: 6, offset: 3 }}>

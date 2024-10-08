@@ -30,9 +30,13 @@ interface LoginFormValues {
   password: string;
 }
 
-const Login: NextPage<Props> = ({ classnames }) => {
+const Login: NextPage<Props> = ({}) => {
   const [show, setShow] = useState(false);
   const [error, setError] = useState("");
+
+  if (error) {
+    console.log(error);
+  }
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -104,14 +108,7 @@ const Login: NextPage<Props> = ({ classnames }) => {
               setSubmitting(false);
             }}
           >
-            {({
-              handleSubmit,
-              handleChange,
-              handleBlur,
-              values,
-              touched,
-              errors,
-            }) => (
+            {({ handleSubmit, touched, errors }) => (
               <Form noValidate onSubmit={handleSubmit}>
                 <Row className="mt-4">
                   <Col sm={{ span: 6, offset: 3 }}>
