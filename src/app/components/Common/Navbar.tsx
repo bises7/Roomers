@@ -13,6 +13,7 @@ import Register from "../Auth/Register";
 import { useState, useEffect } from "react";
 import { getAuth, onAuthStateChanged, signOut, User } from "firebase/auth";
 import app from "../../../../firebase/firebaseConfig";
+import { Button } from "react-bootstrap";
 
 function NavbarComponent() {
   const pathname = usePathname();
@@ -90,7 +91,18 @@ function NavbarComponent() {
               </Link>
 
               {user ? (
-                <Nav.Link onClick={handleSignOut}>Sign Out</Nav.Link>
+                // <Nav.Link onClick={handleSignOut}>Sign Out</Nav.Link>
+                <Button
+                  variant="primary"
+                  className={classNames({
+                    [common.skyblue]: true,
+                    [common.medium]: true,
+                    [common.button]: true,
+                  })}
+                  onClick={handleSignOut}
+                >
+                  Sign Out
+                </Button>
               ) : (
                 <>
                   <Login classnames="" />

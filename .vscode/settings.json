@@ -1,3 +1,10 @@
 {
-  "cSpell.words": ["appspot", "EBGX", "firebaseapp", "formik", "searchbar"]
+  "cSpell.words": [
+    "appspot",
+    "EBGX",
+    "firebaseapp",
+    "Firestore",
+    "formik",
+    "searchbar"
+  ]
 }

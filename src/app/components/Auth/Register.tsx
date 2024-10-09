@@ -16,8 +16,13 @@ import common from "../../styles/common.module.scss";
 import searchBarStyles from "../../styles/searchbar.module.scss";
 import styles from "../../styles/auth.module.scss";
 import { BsApple, BsFacebook, BsGoogle } from "react-icons/bs";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
 import app from "../../../../firebase/firebaseConfig";
+import { doc, setDoc, getFirestore } from "firebase/firestore"; // Import Firestore if using Firestore to store user data
 
 interface Props {
   value: string;
@@ -30,6 +35,9 @@ const Register: NextPage<Props> = ({ value }) => {
   const handleShow = () => setShow(true);
 
   const validationSchema = Yup.object().shape({
+    username: Yup.string()
+      .required("Username is required")
+      .min(3, "Username must be at least 3 characters long"),
     email: Yup.string()
       .email("Invalid email address")
       .required("Email is required"),
@@ -46,15 +54,28 @@ const Register: NextPage<Props> = ({ value }) => {
     ),
   });
 
-  const createUser = async (email: string, password: string) => {
+  const createUser = async (
+    email: string,
+    password: string,
+    username: string
+  ) => {
     const auth = getAuth(app);
+    const db = getFirestore(app); // Initialize Firestore if using Firestore
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
         password
       );
-      console.log("User registered:", userCredential.user);
+      const user = userCredential.user;
+      await updateProfile(user, {
+        displayName: username,
+      });
+      console.log("User registered:", user);
+      await setDoc(doc(db, "users", user.uid), {
+        username: username,
+        email: email,
+      });
       handleClose(); // Close the modal on successful registration
     } catch (error) {
       console.error("Error signing up:", error);
@@ -90,12 +111,12 @@ const Register: NextPage<Props> = ({ value }) => {
               password: "",
               termsAndCondition: false,
               privacyPolicy: false,
+              username: "",
             }}
             validationSchema={validationSchema}
-            onSubmit={({ email, password }, { setSubmitting }) => {
-              createUser(email, password);
+            onSubmit={(values, { setSubmitting }) => {
+              createUser(values.email, values.password, values.username);
               setSubmitting(false);
-              handleClose();
             }}
           >
             {({ handleSubmit, handleChange, touched, errors }) => (
@@ -121,7 +142,26 @@ const Register: NextPage<Props> = ({ value }) => {
                       </Form.Control.Feedback>
                     </Form.Group>
 
-                    <Form.Group>
+                    <Form.Group className="mt-2">
+                      <FormLabel>Username</FormLabel>
+                      <FormControl
+                        as={Field}
+                        name="username"
+                        type="text"
+                        placeholder="Enter username"
+                        className={classNames(
+                          searchBarStyles.searchInput,
+                          styles.input,
+                          "ps-2"
+                        )}
+                        isInvalid={touched.username && !!errors.username}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.username}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+
+                    <Form.Group className="mt-2">
                       <FormLabel>Password</FormLabel>
                       <FormControl
                         as={Field}
