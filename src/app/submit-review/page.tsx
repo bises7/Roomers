@@ -14,7 +14,15 @@ import Image from "next/image";
 import styled from "styled-components";
 import * as Yup from "yup";
 import { Formik, Field, FormikHelpers } from "formik";
-import { addDoc, collection } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  DocumentReference,
+  FirestoreError,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import { db } from "../../../firebase/firebaseConfig";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
@@ -157,6 +165,30 @@ const Page = () => {
     </Thumb>
   ));
 
+  // Normalize the address to lower case
+  const normalizeAddress = (address: string): string =>
+    address.trim().toLowerCase();
+
+  // Function to check or create property based on the address
+  async function getPropertyRef(address: string): Promise<DocumentReference> {
+    const normalizedAddress = normalizeAddress(address);
+    const propertiesCollection = collection(db, "properties");
+    const q = query(
+      propertiesCollection,
+      where("address", "==", normalizedAddress)
+    );
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      return querySnapshot.docs[0].ref;
+    } else {
+      const newPropertyRef = await addDoc(propertiesCollection, {
+        address: normalizedAddress,
+      });
+      return newPropertyRef;
+    }
+  }
+
   // Function to upload images and return their download URLs
   async function uploadImages(files: FileWithPreview[]): Promise<string[]> {
     const storage = getStorage();
@@ -168,27 +200,26 @@ const Page = () => {
     return Promise.all(uploadPromises);
   }
 
-  // Modified function to post review including image URLs
-  const postReviewToFirestore = async (
+  // Function to post review to Firestore
+  async function postReviewToFirestore(
     values: ReviewFormValues,
     imageUrls: string[]
-  ) => {
+  ): Promise<void> {
     try {
-      const docRef = await addDoc(collection(db, "reviews"), {
+      const propertyRef = await getPropertyRef(values.propertyAddress);
+      await addDoc(collection(db, "reviews"), {
         landlordName: values.landlordName || "",
-        propertyAddress: values.propertyAddress,
+        propertyAddress: propertyRef,
         overallRating: values.overallRating,
         detailedFeedback: values.detailedFeedback,
         keywords: values.keywords || "",
-        images: imageUrls, // Store image URLs in Firestore
+        images: imageUrls,
         createdAt: new Date(),
       });
-      console.log("Document written with ID: ", docRef.id);
-    } catch (e) {
-      console.error("Error adding document: ", e);
-      alert("Error posting review!");
+    } catch (error: any) {
+      console.error("Error adding document: ", error.message);
     }
-  };
+  }
 
   // When submitting the form
   const handleSubmit = async (

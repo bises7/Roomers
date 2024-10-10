@@ -14,19 +14,9 @@ import Image from "next/image";
 import PaginationComponent from "@/app/components/Common/Pagination";
 import PaginationStyles from "../../styles/pagination.module.scss";
 import Footer from "@/app/components/Common/Footer";
+import StarRating from "../StarRating";
 
 const Page = ({}) => {
-  const getStar = (stars: number) => {
-    const starIcons = [];
-    for (let i = 0; i < stars; i++) {
-      starIcons.push(<RiStarFill />);
-    }
-    for (let i = stars; i < 5; i++) {
-      starIcons.push(<RiStarLine />);
-    }
-    return starIcons;
-  };
-
   return (
     <div>
       <NavbarComponent />
@@ -35,7 +25,7 @@ const Page = ({}) => {
         <div className="d-flex mt-4">
           <div>
             <h3>4.5</h3>
-            {getStar(4)}
+            <StarRating stars={4} />
             <br />
             <span>47 reviews</span>
           </div>
@@ -105,7 +95,7 @@ const Page = ({}) => {
           <div>
             <span>Linda</span> <br />
             <span className="text-muted">June 10,2023</span> <br />
-            {getStar(4)}
+            <StarRating stars={4} />
             <p>
               Johanaa is the best landlord I&apos;ve ever had. She&apos;s always
               responsive and get things fixed right away. The building is well
@@ -115,7 +105,7 @@ const Page = ({}) => {
           <div className="mt-3">
             <span>Linda</span> <br />
             <span className="text-muted">June 10,2023</span> <br />
-            {getStar(4)}
+            <StarRating stars={3} />
             <p>
               Johanaa is the best landlord I&apos;ve ever had. She&apos;s always
               responsive and get things fixed right away. The building is well
@@ -125,7 +115,7 @@ const Page = ({}) => {
           <div className="mt-3">
             <span>Linda</span> <br />
             <span className="text-muted">June 10,2023</span> <br />
-            {getStar(4)}
+            <StarRating stars={5} />
             <p>
               Johanaa is the best landlord I&apos;ve ever had. She&apos;s always
               responsive and get things fixed right away. The building is well

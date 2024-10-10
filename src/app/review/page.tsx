@@ -1,14 +1,83 @@
 "use client";
 
-import { Col, Container, Row } from "react-bootstrap";
+import { Container, Row } from "react-bootstrap";
 import NavbarComponent from "../components/Common/Navbar";
-import Image from "next/image";
-import classNames from "classnames";
-import styles from "../styles/review.module.scss";
-import { useRouter } from "next/navigation";
+import ReviewCard from "./ReviewCard";
+import { useEffect, useState } from "react";
+import {
+  collection,
+  doc,
+  DocumentReference,
+  getDoc,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
+import { db } from "../../../firebase/firebaseConfig";
+
+interface ReviewData {
+  id: string;
+  imageUrl: string;
+  address: string;
+  rating: number;
+}
+
+interface Property {
+  address: string;
+}
+
+interface Review {
+  images: string[];
+  overallRating: number;
+  propertyAddress: DocumentReference;
+}
 
 const Page = ({}) => {
-  const router = useRouter();
+  const [reviews, setReviews] = useState<ReviewData[]>([]);
+
+  // Function to fetch the latest review for each property
+  const fetchLatestReviewForEachProperty = async () => {
+    const propertiesSnapshot = await getDocs(collection(db, "properties"));
+    const latestReviews = await Promise.all(
+      propertiesSnapshot.docs.map(async (propertyDoc) => {
+        const propertyId = propertyDoc.id;
+        const reviewsQuery = query(
+          collection(db, "reviews"),
+          where("propertyAddress", "==", doc(db, "properties", propertyId)),
+          orderBy("createdAt", "desc"),
+          limit(1)
+        );
+        const reviewSnapshot = await getDocs(reviewsQuery);
+
+        const reviews = reviewSnapshot.docs.map((doc) => doc.data());
+
+        // Calculate average rating if reviews are available
+        const averageRating =
+          reviews.reduce((acc, review) => acc + review.overallRating, 0) /
+            reviews.length || 0;
+
+        if (!reviewSnapshot.empty) {
+          const reviewData = reviewSnapshot.docs[0].data();
+          return {
+            id: reviewSnapshot.docs[0].id,
+            imageUrl: reviewData.images[0] || "https://via.placeholder.com/200", // Placeholder if no image
+            address: propertyDoc.data().address,
+            rating: averageRating,
+          };
+        }
+        return null;
+      })
+    );
+
+    // Filter out any null entries if no reviews were found
+    setReviews(latestReviews.filter((review) => review !== null));
+  };
+
+  useEffect(() => {
+    fetchLatestReviewForEachProperty();
+  }, []);
 
   return (
     <div>
@@ -16,64 +85,15 @@ const Page = ({}) => {
       <Container className="mt-4">
         <h4>Reviews</h4>
         <Row>
-          <Col
-            onClick={() => {
-              router.push("/review/1234MainStreet?id=12");
-            }}
-            sm="4"
-            className={classNames(styles.reviewCard, "d-flex mt-2")}
-          >
-            <Image
-              src="https://picsum.photos/200"
-              alt="Property picture"
-              width={200}
-              height={200}
-              className={classNames(styles.propertyImage)}
+          {reviews.map((review) => (
+            <ReviewCard
+              key={review.id}
+              id={review.id}
+              imageUrl={review.imageUrl}
+              address={review.address}
+              rating={review.rating}
             />
-            <div className="ms-3">
-              <span>123 Main st, San Francisco, CA</span> <br />
-              <span className="text-muted">4.5 stars</span>
-            </div>
-          </Col>
-          <Col sm="4" className={classNames(styles.reviewCard, "d-flex mt-2")}>
-            <Image
-              src="https://picsum.photos/200"
-              alt="Property picture"
-              width={200}
-              height={200}
-              className={classNames(styles.propertyImage)}
-            />
-            <div className="ms-3">
-              <span>123 Main st, San Francisco, CA</span> <br />
-              <span className="text-muted">4.5 stars</span>
-            </div>
-          </Col>
-          <Col sm="4" className={classNames(styles.reviewCard, "d-flex mt-2")}>
-            <Image
-              src="https://picsum.photos/200"
-              alt="Property picture"
-              width={200}
-              height={200}
-              className={classNames(styles.propertyImage)}
-            />
-            <div className="ms-3">
-              <span>123 Main st, San Francisco, CA</span> <br />
-              <span className="text-muted">4.5 stars</span>
-            </div>
-          </Col>
-          <Col sm="4" className={classNames(styles.reviewCard, "d-flex mt-2")}>
-            <Image
-              src="https://picsum.photos/200"
-              alt="Property picture"
-              width={200}
-              height={200}
-              className={classNames(styles.propertyImage)}
-            />
-            <div className="ms-3">
-              <span>123 Main st, San Francisco, CA</span> <br />
-              <span className="text-muted">4.5 stars</span>
-            </div>
-          </Col>
+          ))}
         </Row>
       </Container>
     </div>
