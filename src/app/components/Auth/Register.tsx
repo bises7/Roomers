@@ -16,12 +16,8 @@ import common from "../../styles/common.module.scss";
 import searchBarStyles from "../../styles/searchbar.module.scss";
 import styles from "../../styles/auth.module.scss";
 import { BsApple, BsFacebook, BsGoogle } from "react-icons/bs";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  updateProfile,
-} from "firebase/auth";
-import { doc, setDoc, getFirestore } from "firebase/firestore"; // Import Firestore if using Firestore to store user data
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore"; // Import Firestore if using Firestore to store user data
 import { auth, db } from "../../../../firebase/firebaseConfig";
 
 interface Props {

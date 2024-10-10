@@ -11,7 +11,7 @@ import { usePathname } from "next/navigation";
 import Login from "../Auth/Login";
 import Register from "../Auth/Register";
 import { useState, useEffect } from "react";
-import { getAuth, onAuthStateChanged, signOut, User } from "firebase/auth";
+import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { Button } from "react-bootstrap";
 import { auth } from "../../../../firebase/firebaseConfig";
 

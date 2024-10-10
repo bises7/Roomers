@@ -18,7 +18,7 @@ import common from "../../styles/common.module.scss";
 import searchBarStyles from "../../styles/searchbar.module.scss";
 import styles from "../../styles/auth.module.scss";
 import { BsApple, BsFacebook, BsGoogle } from "react-icons/bs";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { FormikHelpers } from "formik";
 import { auth } from "../../../../firebase/firebaseConfig";
 

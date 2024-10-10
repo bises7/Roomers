@@ -14,8 +14,7 @@ import Image from "next/image";
 import styled from "styled-components";
 import * as Yup from "yup";
 import { Formik, Field, FormikHelpers } from "formik";
-import { addDoc, collection, getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { addDoc, collection } from "firebase/firestore";
 import { db } from "../../../firebase/firebaseConfig";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
