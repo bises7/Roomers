@@ -19,8 +19,8 @@ import searchBarStyles from "../../styles/searchbar.module.scss";
 import styles from "../../styles/auth.module.scss";
 import { BsApple, BsFacebook, BsGoogle } from "react-icons/bs";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import app from "../../../../firebase/firebaseConfig";
 import { FormikHelpers } from "formik";
+import { auth } from "../../../../firebase/firebaseConfig";
 
 interface Props {
   classnames: string;
@@ -56,7 +56,6 @@ const Login: NextPage<Props> = ({}) => {
     password: string,
     setFieldError: FormikHelpers<LoginFormValues>["setFieldError"]
   ) => {
-    const auth = getAuth(app);
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,

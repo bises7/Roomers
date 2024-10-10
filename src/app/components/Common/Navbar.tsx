@@ -12,13 +12,12 @@ import Login from "../Auth/Login";
 import Register from "../Auth/Register";
 import { useState, useEffect } from "react";
 import { getAuth, onAuthStateChanged, signOut, User } from "firebase/auth";
-import app from "../../../../firebase/firebaseConfig";
 import { Button } from "react-bootstrap";
+import { auth } from "../../../../firebase/firebaseConfig";
 
 function NavbarComponent() {
   const pathname = usePathname();
   const [user, setUser] = useState<User | null>(null);
-  const auth = getAuth(app);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {

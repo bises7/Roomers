@@ -21,8 +21,8 @@ import {
   createUserWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import app from "../../../../firebase/firebaseConfig";
 import { doc, setDoc, getFirestore } from "firebase/firestore"; // Import Firestore if using Firestore to store user data
+import { auth, db } from "../../../../firebase/firebaseConfig";
 
 interface Props {
   value: string;
@@ -59,8 +59,6 @@ const Register: NextPage<Props> = ({ value }) => {
     password: string,
     username: string
   ) => {
-    const auth = getAuth(app);
-    const db = getFirestore(app); // Initialize Firestore if using Firestore
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,

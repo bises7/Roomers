@@ -1,91 +1,223 @@
 "use client";
 
 import NavbarComponent from "../components/Common/Navbar";
-import { Button, Container, Form } from "react-bootstrap";
+import { Button, Col, Container, Form } from "react-bootstrap";
 import searchbarStyles from "../styles/searchbar.module.scss";
 import authStyles from "../styles/auth.module.scss";
 import common from "../styles/common.module.scss";
 import classNames from "classnames";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../styles/review.module.scss";
 import { RiStarFill, RiStarLine } from "react-icons/ri";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
+import styled from "styled-components";
+import * as Yup from "yup";
+import { Formik, Field, FormikHelpers } from "formik";
+import { addDoc, collection, getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import { db } from "../../../firebase/firebaseConfig";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
-const thumbsContainer: object = {
-  display: "flex",
-  flexDirection: "row",
-  flexWrap: "wrap",
-  marginTop: 16,
-};
+const reviewSchema = Yup.object().shape({
+  landlordName: Yup.string(), // Optional field
+  propertyAddress: Yup.string().required("Property address is required"),
+  detailedFeedback: Yup.string().required("Detailed feedback is required"),
+  overallRating: Yup.number()
+    .min(1, "Please rate from 1 to 5")
+    .max(5, "Please rate from 1 to 5")
+    .required("Overall rating is required"),
+  keywords: Yup.string(), // Optional field
+});
 
-const thumb: object = {
-  display: "flex",
-  justifyContent: "center",
-  borderRadius: 2,
-  border: "1px solid #eaeaea",
-  marginBottom: 8,
-  marginRight: 8,
-  width: 100,
-  height: 100,
-  padding: 4,
-  boxSizing: "border-box",
-};
+const ThumbsContainer = styled.aside`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 16px;
+`;
 
-const thumbInner: object = {
-  display: "flex",
-  minWidth: 0,
-  overflow: "hidden",
-};
+const Thumb = styled.div`
+  display: flex;
+  justify-content: center;
+  border-radius: 2px;
+  border: 1px solid #eaeaea;
+  margin-bottom: 8px;
+  margin-right: 8px;
+  width: 100px;
+  height: 100px;
+  padding: 4px;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+`;
 
-const img: object = {
-  display: "block",
-  width: "auto",
-  height: "100%",
-};
+const ThumbInner = styled.div`
+  display: flex;
+  min-width: 0;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+`;
 
+const Overlay = styled.div`
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  &:hover {
+    opacity: 1;
+  }
+`;
+
+const Text = styled.span`
+  font-size: 16px;
+  font-weight: bold;
+`;
 interface FileWithPreview {
   name: string;
   preview: string; // Assuming preview is a URL string
+  file: File;
+}
+interface ReviewFormValues {
+  landlordName?: string;
+  propertyAddress: string;
+  overallRating: number;
+  detailedFeedback: string;
+  keywords?: string;
 }
 
 const Page = () => {
-  const [landlordName, setLandlordName] = useState<string>("");
-  const [propertyAddress, setPropertyAddress] = useState<string>("");
   const [starHoverNumber, setStarHoverNumber] = useState<number>(0);
-  const [keywords, setKeywords] = useState<string>("");
+  const [files, setFiles] = useState<FileWithPreview[]>([]);
 
   const { getRootProps, getInputProps } = useDropzone({
+    multiple: true,
     disabled: false,
-    onDrop: (acceptedFiles) => {
-      setFiles(
-        acceptedFiles.map((file) =>
-          Object.assign(file, {
-            preview: URL.createObjectURL(file),
-          })
-        )
-      );
+    onDrop: (acceptedFiles: File[]) => {
+      // Map each file to an object that includes the file, its name, and a preview URL
+      const updatedFiles = [
+        ...files,
+        ...acceptedFiles.map((file) => ({
+          file: file,
+          name: file.name,
+          preview: URL.createObjectURL(file),
+        })),
+      ];
+
+      // Optionally restrict to the first 12 files
+      if (updatedFiles.length > 12) {
+        setFiles(updatedFiles.slice(0, 12));
+        alert("Only the first 12 files have been uploaded.");
+      } else {
+        setFiles(updatedFiles);
+      }
     },
   });
 
-  const [files, setFiles] = useState<FileWithPreview[]>([]);
+  useEffect(() => {
+    return () => {
+      files.forEach((file) => URL.revokeObjectURL(file.preview));
+    };
+  }, [files]);
 
-  const thumbs = files.map((file) => (
-    <div style={thumb} key={file.name}>
-      <div style={thumbInner}>
+  const removeFile = (index: number) => {
+    // Create a new array excluding the file at the specified index
+    const newFiles = files.filter((_, idx) => idx !== index);
+
+    // Update the state with the new array
+    setFiles(newFiles);
+
+    // If you are using object URLs (from createObjectURL), make sure to revoke them to avoid memory leaks
+    URL.revokeObjectURL(files[index].preview);
+  };
+
+  const thumbs = files.map((file, index) => (
+    <Thumb key={file.name}>
+      <ThumbInner>
         <Image
           src={file.preview}
-          style={img}
-          onLoad={() => {
-            URL.revokeObjectURL(file.preview);
-          }}
-          alt="thumbs"
-          width={30}
-          height={30}
+          alt={file.name}
+          width={100}
+          height={100}
+          layout="responsive"
         />
-      </div>
-    </div>
+        <Overlay onClick={() => removeFile(index)}>
+          <Text>Remove</Text>
+        </Overlay>
+      </ThumbInner>
+    </Thumb>
   ));
+
+  // Function to upload images and return their download URLs
+  async function uploadImages(files: FileWithPreview[]): Promise<string[]> {
+    const storage = getStorage();
+    const uploadPromises = files.map(async (file) => {
+      const storageRef = ref(storage, `reviews/${file.name}`);
+      const snapshot = await uploadBytes(storageRef, file.file);
+      return getDownloadURL(snapshot.ref);
+    });
+    return Promise.all(uploadPromises);
+  }
+
+  // Modified function to post review including image URLs
+  const postReviewToFirestore = async (
+    values: ReviewFormValues,
+    imageUrls: string[]
+  ) => {
+    try {
+      const docRef = await addDoc(collection(db, "reviews"), {
+        landlordName: values.landlordName || "",
+        propertyAddress: values.propertyAddress,
+        overallRating: values.overallRating,
+        detailedFeedback: values.detailedFeedback,
+        keywords: values.keywords || "",
+        images: imageUrls, // Store image URLs in Firestore
+        createdAt: new Date(),
+      });
+      console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+      alert("Error posting review!");
+    }
+  };
+
+  // When submitting the form
+  const handleSubmit = async (
+    values: ReviewFormValues,
+    {
+      resetForm,
+      setSubmitting,
+    }: FormikHelpers<{
+      landlordName: string;
+      propertyAddress: string;
+      overallRating: number;
+      detailedFeedback: string;
+      keywords: string;
+    }>
+  ) => {
+    // First, upload the images and get their URLs
+    const imageUrls = await uploadImages(
+      files.map((file) => ({ file: file.file, name: file.name, preview: "" }))
+    );
+
+    // Then, post the review data with image URLs to Firestore
+    await postReviewToFirestore(values, imageUrls);
+
+    resetForm();
+    setFiles([]);
+    setStarHoverNumber(0);
+    setSubmitting(false);
+  };
 
   return (
     <div>
@@ -99,187 +231,252 @@ const Page = () => {
           </span>
         </div>
 
-        <Form className="mt-4 w-50">
-          <Form.Group>
-            <Form.Label>Landlord Name</Form.Label>
-            <Form.Control
-              className={classNames({
-                [searchbarStyles.searchInput]: true,
-                [authStyles.input]: true,
-                "ps-2": true,
-              })}
-              type="text"
-              placeholder="Landlord Name"
-              value={landlordName}
-              onChange={(e) => setLandlordName(e.target.value)}
-              formNoValidate
-            />
-          </Form.Group>
-          <Form.Group className="mt-3">
-            <Form.Label>Property Address</Form.Label>
-            <Form.Control
-              className={classNames({
-                [searchbarStyles.searchInput]: true,
-                [authStyles.input]: true,
-                "ps-2": true,
-              })}
-              type="text"
-              placeholder="Property Address"
-              value={propertyAddress}
-              onChange={(e) => setPropertyAddress(e.target.value)}
-              formNoValidate
-            />
-          </Form.Group>
-          <Form.Group className="mt-3">
-            <Form.Label>Overall Rating</Form.Label>
-            <div>
-              <span>
-                {starHoverNumber < 1 ? (
-                  <RiStarLine
-                    onMouseEnter={() => {
-                      setStarHoverNumber(1);
-                    }}
-                    className={classNames(styles.star, "me-1")}
-                  />
-                ) : (
-                  <RiStarFill
-                    onMouseEnter={() => {
-                      setStarHoverNumber(1);
-                    }}
-                    className={classNames(styles.star, "me-1")}
-                  />
-                )}
-              </span>
-              <span>
-                {starHoverNumber < 2 ? (
-                  <RiStarLine
-                    onMouseEnter={() => {
-                      setStarHoverNumber(2);
-                    }}
-                    className={classNames(styles.star, "me-1")}
-                  />
-                ) : (
-                  <RiStarFill
-                    onMouseEnter={() => {
-                      setStarHoverNumber(2);
-                    }}
-                    className={classNames(styles.star, "me-1")}
-                  />
-                )}
-              </span>
-              <span>
-                {starHoverNumber < 3 ? (
-                  <RiStarLine
-                    onMouseEnter={() => {
-                      setStarHoverNumber(3);
-                    }}
-                    className={classNames(styles.star, "me-1")}
-                  />
-                ) : (
-                  <RiStarFill
-                    onMouseEnter={() => {
-                      setStarHoverNumber(3);
-                    }}
-                    className={classNames(styles.star, "me-1")}
-                  />
-                )}
-              </span>
-              <span>
-                {starHoverNumber < 4 ? (
-                  <RiStarLine
-                    onMouseEnter={() => {
-                      setStarHoverNumber(4);
-                    }}
-                    className={classNames(styles.star, "me-1")}
-                  />
-                ) : (
-                  <RiStarFill
-                    onMouseEnter={() => {
-                      setStarHoverNumber(4);
-                    }}
-                    className={classNames(styles.star, "me-1")}
-                  />
-                )}
-              </span>
-              <span>
-                {starHoverNumber < 5 ? (
-                  <RiStarLine
-                    onMouseEnter={() => {
-                      setStarHoverNumber(5);
-                    }}
-                    className={classNames(styles.star, "me-1")}
-                  />
-                ) : (
-                  <RiStarFill
-                    onMouseEnter={() => {
-                      setStarHoverNumber(5);
-                    }}
-                    className={classNames(styles.star, "me-1")}
-                  />
-                )}
-              </span>
-            </div>
-          </Form.Group>
-          <Form.Group className="mt-3">
-            <Form.Label>Detailed Feedback</Form.Label>
-            <Form.Control as="textarea" style={{ height: "140px" }} />
-          </Form.Group>
-          <Form.Group className="mt-3">
-            <Form.Label>Add Keywords</Form.Label>
-            <Form.Control
-              className={classNames({
-                [searchbarStyles.searchInput]: true,
-                [authStyles.input]: true,
-                "ps-2": true,
-              })}
-              type="text"
-              placeholder="Example: Spacious, Convenient, Noisy"
-              value={keywords}
-              onChange={(e) => setKeywords(e.target.value)}
-              formNoValidate
-            />
-          </Form.Group>
-        </Form>
-
-        <section
-          className={classNames(
-            styles.container,
-            "mt-4",
-            "text-center",
-            "py-5"
-          )}
+        <Formik
+          initialValues={{
+            landlordName: "",
+            propertyAddress: "",
+            overallRating: 0,
+            detailedFeedback: "",
+            keywords: "",
+          }}
+          validationSchema={reviewSchema}
+          onSubmit={(values, actions) => {
+            handleSubmit(values, actions);
+            actions.setSubmitting(false);
+          }}
         >
-          <div {...getRootProps({ className: "dropzone" })}>
-            <input {...getInputProps()} />
-            <h5>Drag and drop photos here</h5>
-            <span>or</span> <br />
-            <Button
-              variant="light"
-              className={classNames(common.button, "mt-2")}
-            >
-              Choose photos from device
-            </Button>
-          </div>
-        </section>
+          {({ handleSubmit, touched, errors, setFieldValue }) => (
+            <Form noValidate onSubmit={handleSubmit} className="mt-4">
+              <div className="w-50">
+                <Form.Group>
+                  <Form.Label>Landlord Name</Form.Label>
+                  <Form.Control
+                    as={Field}
+                    name="landlordName"
+                    className={classNames(
+                      searchbarStyles.searchInput,
+                      authStyles.input,
+                      "ps-2"
+                    )}
+                    placeholder="Landlord Name"
+                    isInvalid={touched.landlordName && !!errors.landlordName}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.landlordName}
+                  </Form.Control.Feedback>
+                </Form.Group>
 
-        <aside style={thumbsContainer}>{thumbs}</aside>
+                <Form.Group className="mt-2">
+                  <Form.Label>Property Address</Form.Label>
+                  <Form.Control
+                    as={Field}
+                    name="propertyAddress"
+                    className={classNames(
+                      searchbarStyles.searchInput,
+                      authStyles.input,
+                      "ps-2"
+                    )}
+                    placeholder="Property Address"
+                    isInvalid={
+                      touched.propertyAddress && !!errors.propertyAddress
+                    }
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.propertyAddress}
+                  </Form.Control.Feedback>
+                </Form.Group>
 
-        <div className="d-flex justify-content-end my-4">
-          <div>
-            <Button
-              variant="secondary"
-              className={classNames(common.button, "me-2")}
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="primary"
-              className={classNames(common.button, common.skyblue)}
-            >
-              Post review
-            </Button>
-          </div>
-        </div>
+                <Form.Group className="mt-3">
+                  <Form.Label>Overall Rating</Form.Label>
+                  <Form.Control
+                    as={Col}
+                    isInvalid={touched.overallRating && !!errors.overallRating}
+                  >
+                    <span>
+                      {starHoverNumber < 1 ? (
+                        <RiStarLine
+                          onMouseEnter={() => {
+                            setFieldValue("overallRating", 1);
+                            setStarHoverNumber(1);
+                          }}
+                          className={classNames(styles.star, "me-1")}
+                        />
+                      ) : (
+                        <RiStarFill
+                          onMouseEnter={() => {
+                            setStarHoverNumber(1);
+                            setFieldValue("overallRating", 1);
+                          }}
+                          className={classNames(styles.star, "me-1")}
+                        />
+                      )}
+                    </span>
+                    <span>
+                      {starHoverNumber < 2 ? (
+                        <RiStarLine
+                          onMouseEnter={() => {
+                            setFieldValue("overallRating", 2);
+                            setStarHoverNumber(2);
+                          }}
+                          className={classNames(styles.star, "me-1")}
+                        />
+                      ) : (
+                        <RiStarFill
+                          onMouseEnter={() => {
+                            setFieldValue("overallRating", 2);
+                            setStarHoverNumber(2);
+                          }}
+                          className={classNames(styles.star, "me-1")}
+                        />
+                      )}
+                    </span>
+                    <span>
+                      {starHoverNumber < 3 ? (
+                        <RiStarLine
+                          onMouseEnter={() => {
+                            setFieldValue("overallRating", 3);
+                            setStarHoverNumber(3);
+                          }}
+                          className={classNames(styles.star, "me-1")}
+                        />
+                      ) : (
+                        <RiStarFill
+                          onMouseEnter={() => {
+                            setFieldValue("overallRating", 3);
+                            setStarHoverNumber(3);
+                          }}
+                          className={classNames(styles.star, "me-1")}
+                        />
+                      )}
+                    </span>
+                    <span>
+                      {starHoverNumber < 4 ? (
+                        <RiStarLine
+                          onMouseEnter={() => {
+                            setFieldValue("overallRating", 4);
+                            setStarHoverNumber(4);
+                          }}
+                          className={classNames(styles.star, "me-1")}
+                        />
+                      ) : (
+                        <RiStarFill
+                          onMouseEnter={() => {
+                            setFieldValue("overallRating", 4);
+                            setStarHoverNumber(4);
+                          }}
+                          className={classNames(styles.star, "me-1")}
+                        />
+                      )}
+                    </span>
+                    <span>
+                      {starHoverNumber < 5 ? (
+                        <RiStarLine
+                          onMouseEnter={() => {
+                            setFieldValue("overallRating", 5);
+                            setStarHoverNumber(5);
+                          }}
+                          className={classNames(styles.star, "me-1")}
+                        />
+                      ) : (
+                        <RiStarFill
+                          onMouseEnter={() => {
+                            setFieldValue("overallRating", 5);
+                            setStarHoverNumber(5);
+                          }}
+                          className={classNames(styles.star, "me-1")}
+                        />
+                      )}
+                    </span>
+                  </Form.Control>
+                  <Form.Control.Feedback type="invalid">
+                    {errors.overallRating}
+                  </Form.Control.Feedback>
+                </Form.Group>
+
+                <Form.Group className="mt-2">
+                  <Form.Label>Detailed Feedback</Form.Label>
+                  <Form.Control
+                    as={Field}
+                    name="detailedFeedback"
+                    component="textarea"
+                    rows={3}
+                    className={classNames(
+                      searchbarStyles.searchInput,
+                      authStyles.input,
+                      "p-2",
+                      "form-control"
+                    )}
+                    placeholder="Enter detailed feedback"
+                    isInvalid={
+                      touched.detailedFeedback && !!errors.detailedFeedback
+                    }
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.detailedFeedback}
+                  </Form.Control.Feedback>
+                </Form.Group>
+
+                <Form.Group className="mt-2">
+                  <Form.Label>Add Keywords</Form.Label>
+                  <Form.Control
+                    as={Field}
+                    name="keywords"
+                    className={classNames(
+                      searchbarStyles.searchInput,
+                      authStyles.input,
+                      "ps-2"
+                    )}
+                    placeholder="Example: Spacious, Convenient, Noisy"
+                    isInvalid={touched.keywords && !!errors.keywords}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.keywords}
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </div>
+
+              <section
+                className={classNames(
+                  styles.container,
+                  "mt-4",
+                  "text-center",
+                  "py-5"
+                )}
+              >
+                <div {...getRootProps({ className: "dropzone" })}>
+                  <input {...getInputProps()} />
+                  <h5>Drag and drop photos here</h5>
+                  <span>or</span> <br />
+                  <Button
+                    variant="light"
+                    className={classNames(common.button, "mt-2")}
+                  >
+                    Choose photos from device
+                  </Button>
+                </div>
+              </section>
+
+              <ThumbsContainer>{thumbs}</ThumbsContainer>
+
+              <div className="d-flex justify-content-end my-4">
+                <Button
+                  variant="secondary"
+                  className={classNames(common.button, "me-2")}
+                  type="button"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="primary"
+                  className={classNames(common.button, common.skyblue)}
+                  type="submit"
+                >
+                  Post Review
+                </Button>
+              </div>
+            </Form>
+          )}
+        </Formik>
       </Container>
     </div>
   );
