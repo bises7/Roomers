@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import {
   collection,
   doc,
-  DocumentReference,
   getDocs,
   limit,
   orderBy,

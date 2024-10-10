@@ -217,7 +217,7 @@ const Page = () => {
         createdAt: new Date(),
       });
     } catch (error) {
-      let e = error as FirestoreError;
+      const e = error as FirestoreError;
       console.error("Error adding document: ", e.message);
     }
   }
