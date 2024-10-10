@@ -216,8 +216,9 @@ const Page = () => {
         images: imageUrls,
         createdAt: new Date(),
       });
-    } catch (error: any) {
-      console.error("Error adding document: ", error.message);
+    } catch (error) {
+      let e = error as FirestoreError;
+      console.error("Error adding document: ", e.message);
     }
   }
 

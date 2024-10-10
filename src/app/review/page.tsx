@@ -8,7 +8,6 @@ import {
   collection,
   doc,
   DocumentReference,
-  getDoc,
   getDocs,
   limit,
   orderBy,
@@ -22,16 +21,6 @@ interface ReviewData {
   imageUrl: string;
   address: string;
   rating: number;
-}
-
-interface Property {
-  address: string;
-}
-
-interface Review {
-  images: string[];
-  overallRating: number;
-  propertyAddress: DocumentReference;
 }
 
 const Page = ({}) => {

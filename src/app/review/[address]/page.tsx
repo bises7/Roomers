@@ -4,7 +4,6 @@ import NavbarComponent from "@/app/components/Common/Navbar";
 import classNames from "classnames";
 import { Col, Container, FormControl, ProgressBar, Row } from "react-bootstrap";
 import { FaAngleDown } from "react-icons/fa6";
-import { RiStarFill, RiStarLine } from "react-icons/ri";
 import styles from "../../styles/review.module.scss";
 import profileStyles from "../../styles/profile.module.scss";
 import searchBarStyles from "../../styles/searchbar.module.scss";

@@ -7,7 +7,7 @@ interface StarRatingProps {
 
 const StarRating: React.FC<StarRatingProps> = ({ stars }) => {
   const totalStars = 5;
-  let starIcons = [];
+  const starIcons = [];
 
   // Add filled stars as per the rating
   for (let i = 0; i < stars; i++) {
