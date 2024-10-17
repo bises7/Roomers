@@ -7,7 +7,7 @@ interface Props {
   className: string;
 }
 
-const HeplUs: NextPage<Props> = ({}) => {
+const HelpUs: NextPage<Props> = ({}) => {
   return (
     <div className="mt-5">
       <div>
@@ -34,4 +34,4 @@ const HeplUs: NextPage<Props> = ({}) => {
   );
 };
 
-export default HeplUs;
+export default HelpUs;

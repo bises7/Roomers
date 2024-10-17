@@ -14,6 +14,10 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../../../firebase/firebaseConfig";
+import PaginationComponent from "../components/Common/Pagination";
+import classNames from "classnames";
+import PaginationStyles from "../styles/pagination.module.scss";
+import SearchInput from "../components/Homepage/SearchBar";
 
 interface ReviewData {
   id: string;
@@ -22,8 +26,12 @@ interface ReviewData {
   rating: number;
 }
 
+const ITEMS_PER_PAGE = 30;
+
 const Page = ({}) => {
   const [reviews, setReviews] = useState<ReviewData[]>([]);
+  const [propertyId, setPropertyId] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   // Function to fetch the latest review for each property
   const fetchLatestReviewForEachProperty = async () => {
@@ -31,6 +39,7 @@ const Page = ({}) => {
     const latestReviews = await Promise.all(
       propertiesSnapshot.docs.map(async (propertyDoc) => {
         const propertyId = propertyDoc.id;
+        setPropertyId(propertyId);
         const reviewsQuery = query(
           collection(db, "reviews"),
           where("propertyAddress", "==", doc(db, "properties", propertyId)),
@@ -67,22 +76,47 @@ const Page = ({}) => {
     fetchLatestReviewForEachProperty();
   }, []);
 
+  const indexOfLastReview = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstReview = indexOfLastReview - ITEMS_PER_PAGE;
+  const currentReviews = reviews.slice(indexOfFirstReview, indexOfLastReview);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = () => {
+    console.log(searchQuery);
+  };
+
   return (
     <div>
       <NavbarComponent />
       <Container className="mt-4">
-        <h4>Reviews</h4>
+        <SearchInput
+          placeholder="Search by landlord name, city or rating..."
+          setQuery={setSearchQuery}
+          query={searchQuery}
+          handleSearch={handleSearch}
+        />
+
+        <h4 className="mt-4">Reviews</h4>
+
         <Row>
-          {reviews.map((review) => (
+          {currentReviews.map((review) => (
             <ReviewCard
               key={review.id}
-              id={review.id}
+              id={propertyId}
               imageUrl={review.imageUrl}
               address={review.address}
               rating={review.rating}
             />
           ))}
         </Row>
+
+        <PaginationComponent
+          totalItems={reviews.length}
+          currentPage={currentPage}
+          itemsPerPage={ITEMS_PER_PAGE}
+          setCurrentPage={setCurrentPage}
+          className={classNames("mt-4", PaginationStyles.pagination)}
+        />
       </Container>
     </div>
   );

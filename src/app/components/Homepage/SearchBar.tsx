@@ -1,20 +1,27 @@
 // components/SearchInput.tsx
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { FormControl, InputGroup } from "react-bootstrap";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { BsArrowReturnLeft, BsSearch } from "react-icons/bs";
 import classNames from "classnames";
 import styles from "../../styles/searchbar.module.scss";
 
-const SearchInput: React.FC = () => {
-  const [query, setQuery] = useState<string>("");
+interface props {
+  placeholder: string;
+  query: string;
+  setQuery: Dispatch<SetStateAction<string>>;
+  handleSearch: () => void;
+}
 
-  const handleSearch = (text: string) => {
-    setQuery(text);
-    if (!text.length) {
-      return;
-    }
-  };
+const SearchInput = ({ placeholder, query, setQuery, handleSearch }: props) => {
+  // const [query, setQuery] = useState<string>("");
+
+  // const handleSearch = (text: string) => {
+  //   setQuery(text);
+  //   if (!text.length) {
+  //     return;
+  //   }
+  // };
 
   return (
     <InputGroup
@@ -35,17 +42,20 @@ const SearchInput: React.FC = () => {
         className={classNames({
           [styles.searchInput]: true,
         })}
-        placeholder="Search by address, city, or rating..."
+        placeholder={placeholder}
         aria-label="Search"
         aria-describedby="basic-addon1"
         value={query}
-        onChange={(e) => handleSearch(e.target.value)}
+        onChange={(e) => setQuery(e.target.value)}
         formNoValidate
       />
       <InputGroup.Text
         className={classNames({
           [styles.enterIcon]: true,
         })}
+        onClick={() => {
+          handleSearch();
+        }}
         id="basic-addon1"
       >
         <BsArrowReturnLeft />

@@ -9,10 +9,17 @@ import TopRated from "./components/Homepage/TopRated";
 import HowItWorks from "./components/Homepage/HowItWorks";
 import RecentReviews from "./components/Homepage/RecentReviews";
 import WhyRoomers from "./components/Homepage/WhyRoomers";
-import HelpUs from "./components/Homepage/HeplUs";
+import HelpUs from "./components/Homepage/HelpUs";
 import Footer from "./components/Common/Footer";
+import { useState } from "react";
 
 export default function Home() {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = () => {
+    console.log(searchQuery);
+  };
+
   return (
     <>
       <NavbarComponent />
@@ -23,7 +30,12 @@ export default function Home() {
         })}
       >
         <Jumbotron />
-        <SearchInput />
+        <SearchInput
+          placeholder="Search by landlord name, city or rating..."
+          setQuery={setSearchQuery}
+          query={searchQuery}
+          handleSearch={handleSearch}
+        />
         <TopRated />
         <HowItWorks className="" />
         <RecentReviews className="" />

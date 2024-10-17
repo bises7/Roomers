@@ -14,19 +14,149 @@ import PaginationComponent from "@/app/components/Common/Pagination";
 import PaginationStyles from "../../styles/pagination.module.scss";
 import Footer from "@/app/components/Common/Footer";
 import StarRating from "../StarRating";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
+import { db } from "../../../../firebase/firebaseConfig";
+
+interface Property {
+  address: string;
+}
+
+interface Review {
+  createdAt: {
+    seconds: number;
+  };
+  detailedFeedback: string;
+  images: string[];
+  keywords: string;
+  landlordName: string;
+  overallRating: number;
+  propertyAddress: string;
+}
+
+// Helper function to calculate rating percentages
+const calculateRatingPercentages = (reviews: Review[]) => {
+  const ratingCounts: { [key: number]: number } = {
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0,
+    5: 0,
+  };
+  reviews.forEach((review) => {
+    ratingCounts[review.overallRating] += 1;
+  });
+  const totalReviews = reviews.length;
+  return {
+    oneStar: (ratingCounts[1] / totalReviews) * 100,
+    twoStars: (ratingCounts[2] / totalReviews) * 100,
+    threeStars: (ratingCounts[3] / totalReviews) * 100,
+    fourStars: (ratingCounts[4] / totalReviews) * 100,
+    fiveStars: (ratingCounts[5] / totalReviews) * 100,
+  };
+};
+
+// Helper function to calculate average rating
+const calculateAverageRating = (reviews: Review[]): number => {
+  if (reviews.length === 0) return 0; // Return 0 if no reviews to avoid division by zero
+
+  const totalSum = reviews.reduce(
+    (sum, review) => sum + review.overallRating,
+    0
+  );
+  return totalSum / reviews.length;
+};
+
+const ITEMS_PER_PAGE = 10;
 
 const Page = ({}) => {
+  const [property, setProperty] = useState<Property | null>(null);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [landlordName, setLandlordName] = useState<string>("");
+  const [averageRating, setAverageRating] = useState<number>(0);
+  const [ratingPercentages, setRatingPercentages] = useState({
+    oneStar: 0,
+    twoStars: 0,
+    threeStars: 0,
+    fourStars: 0,
+    fiveStars: 0,
+  });
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const id = searchParams.get("id");
+
+    const fetchPropertyAndReviews = async () => {
+      if (!id) return;
+      const docRef = doc(db, "properties", id);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        setProperty(docSnap.data() as Property);
+        fetchReviews(id);
+      } else {
+        console.log("No such property!");
+      }
+    };
+
+    const fetchReviews = async (id: string) => {
+      const q = query(
+        collection(db, "reviews"),
+        where("propertyAddress", "==", doc(db, "properties", id))
+      );
+      const querySnapshot = await getDocs(q);
+      const reviewsData: Review[] = querySnapshot.docs.map(
+        (doc) => doc.data() as Review
+      );
+      setReviews(reviewsData);
+      setRatingPercentages(calculateRatingPercentages(reviewsData));
+      setAverageRating(calculateAverageRating(reviewsData));
+
+      // Find the first review with a non-empty landlord name
+      const reviewWithLandlord = reviewsData.find(
+        (review) => review.landlordName
+      );
+      if (reviewWithLandlord) {
+        setLandlordName(reviewWithLandlord.landlordName);
+      }
+    };
+
+    fetchPropertyAndReviews();
+  }, [searchParams]);
+
+  const indexOfLastReview = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstReview = indexOfLastReview - ITEMS_PER_PAGE;
+  const currentReviews = reviews.slice(indexOfFirstReview, indexOfLastReview);
+
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = () => {
+    console.log(searchQuery);
+  };
+
   return (
     <div>
       <NavbarComponent />
       <Container className="mt-4">
-        <h5>Johanna Smith, 1234 5th Ave, San Francisco</h5>
+        <h5>
+          {landlordName}, {property?.address}
+        </h5>
         <div className="d-flex mt-4">
           <div>
-            <h3>4.5</h3>
-            <StarRating stars={4} />
+            <h3>{averageRating.toFixed(1)}</h3>
+            <StarRating stars={Math.round(averageRating)} />
             <br />
-            <span>47 reviews</span>
+            <span>{reviews.length} reviews</span>
           </div>
           <div className="w-50 ms-4">
             <Row>
@@ -34,45 +164,48 @@ const Page = ({}) => {
                 <span>5</span>
               </Col>
               <Col className="pt-1">
-                <ProgressBar variant="dark" now={65} />
+                <ProgressBar variant="dark" now={ratingPercentages.fiveStars} />
               </Col>
-              <Col sm={1}>65%</Col>
+              <Col sm={1}>{ratingPercentages.fiveStars.toFixed(0)}%</Col>
             </Row>
             <Row>
               <Col sm={1}>
                 <span>4</span>
               </Col>
               <Col className="pt-1">
-                <ProgressBar variant="dark" now={20} />
+                <ProgressBar variant="dark" now={ratingPercentages.fourStars} />
               </Col>
-              <Col sm={1}>20%</Col>
+              <Col sm={1}>{ratingPercentages.fourStars.toFixed(0)}%</Col>
             </Row>
             <Row>
               <Col sm={1}>
                 <span>3</span>
               </Col>
               <Col className="pt-1">
-                <ProgressBar variant="dark" now={7} />
+                <ProgressBar
+                  variant="dark"
+                  now={ratingPercentages.threeStars}
+                />
               </Col>
-              <Col sm={1}>7%</Col>
+              <Col sm={1}>{ratingPercentages.threeStars.toFixed(0)}%</Col>
             </Row>
             <Row>
               <Col sm={1}>
                 <span>2</span>
               </Col>
               <Col className="pt-1">
-                <ProgressBar variant="dark" now={3} />
+                <ProgressBar variant="dark" now={ratingPercentages.twoStars} />
               </Col>
-              <Col sm={1}>3%</Col>
+              <Col sm={1}>{ratingPercentages.twoStars.toFixed(0)}%</Col>
             </Row>
             <Row>
               <Col sm={1}>
                 <span>1</span>
               </Col>
               <Col className="pt-1">
-                <ProgressBar variant="dark" now={5} />
+                <ProgressBar variant="dark" now={ratingPercentages.oneStar} />
               </Col>
-              <Col sm={1}>5%</Col>
+              <Col sm={1}>{ratingPercentages.oneStar.toFixed(0)}%</Col>
             </Row>
           </div>
         </div>
@@ -88,40 +221,17 @@ const Page = ({}) => {
           </span>
         </div>
 
-        <SearchInput />
-
-        <div className="mt-4">
-          <div>
-            <span>Linda</span> <br />
-            <span className="text-muted">June 10,2023</span> <br />
-            <StarRating stars={4} />
-            <p>
-              Johanaa is the best landlord I&apos;ve ever had. She&apos;s always
-              responsive and get things fixed right away. The building is well
-              maintained and in a great location. Highly recommend.
-            </p>
+        {currentReviews.map((review, index) => (
+          <div key={index} className="mt-3">
+            <span>{review.landlordName}</span> <br />
+            <span className="text-muted">
+              {new Date(review.createdAt.seconds * 1000).toLocaleDateString()}
+            </span>{" "}
+            <br />
+            <StarRating stars={review.overallRating} />
+            <p>{review.detailedFeedback}</p>
           </div>
-          <div className="mt-3">
-            <span>Linda</span> <br />
-            <span className="text-muted">June 10,2023</span> <br />
-            <StarRating stars={3} />
-            <p>
-              Johanaa is the best landlord I&apos;ve ever had. She&apos;s always
-              responsive and get things fixed right away. The building is well
-              maintained and in a great location. Highly recommend.
-            </p>
-          </div>
-          <div className="mt-3">
-            <span>Linda</span> <br />
-            <span className="text-muted">June 10,2023</span> <br />
-            <StarRating stars={5} />
-            <p>
-              Johanaa is the best landlord I&apos;ve ever had. She&apos;s always
-              responsive and get things fixed right away. The building is well
-              maintained and in a great location. Highly recommend.
-            </p>
-          </div>
-        </div>
+        ))}
 
         <div className="d-flex mt-4">
           <Image
@@ -147,11 +257,10 @@ const Page = ({}) => {
         </div>
 
         <PaginationComponent
-          totalItems={10}
-          currentPage={1}
-          itemsPerPage={2}
-          key={2}
-          setCurrentPage={() => {}}
+          totalItems={reviews.length}
+          currentPage={currentPage}
+          itemsPerPage={ITEMS_PER_PAGE}
+          setCurrentPage={setCurrentPage}
           className={classNames("mt-4", PaginationStyles.pagination)}
         />
 

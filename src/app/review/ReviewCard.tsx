@@ -6,7 +6,7 @@ import styles from "../styles/review.module.scss"; // Adjust the path as necessa
 import StarRating from "./StarRating";
 
 interface ReviewCardProps {
-  id: string;
+  id: string | null;
   imageUrl: string;
   address: string;
   rating: number;
