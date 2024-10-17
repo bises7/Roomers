@@ -16,7 +16,12 @@ import common from "../../styles/common.module.scss";
 import searchBarStyles from "../../styles/searchbar.module.scss";
 import styles from "../../styles/auth.module.scss";
 import { BsApple, BsFacebook, BsGoogle } from "react-icons/bs";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  signOut,
+  updateProfile,
+} from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore"; // Import Firestore if using Firestore to store user data
 import { auth, db } from "../../../../firebase/firebaseConfig";
 
@@ -61,15 +66,29 @@ const Register: NextPage<Props> = ({ value }) => {
         email,
         password
       );
+      await signOut(auth);
+
       const user = userCredential.user;
+
+      // Send verification email
+      sendEmailVerification(user)
+        .then(() => {
+          console.log("Verification email sent.");
+        })
+        .catch((error) => {
+          console.error("Error sending email verification", error);
+        });
+
       await updateProfile(user, {
         displayName: username,
       });
-      console.log("User registered:", user);
+
       await setDoc(doc(db, "users", user.uid), {
-        username: username,
-        email: email,
+        username,
+        email,
       });
+
+      console.log("User registered:", user);
       handleClose(); // Close the modal on successful registration
     } catch (error) {
       console.error("Error signing up:", error);

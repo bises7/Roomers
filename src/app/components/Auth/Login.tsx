@@ -18,7 +18,7 @@ import common from "../../styles/common.module.scss";
 import searchBarStyles from "../../styles/searchbar.module.scss";
 import styles from "../../styles/auth.module.scss";
 import { BsApple, BsFacebook, BsGoogle } from "react-icons/bs";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { FormikHelpers } from "formik";
 import { auth } from "../../../../firebase/firebaseConfig";
 
@@ -54,7 +54,8 @@ const Login: NextPage<Props> = ({}) => {
   const loginUser = async (
     email: string,
     password: string,
-    setFieldError: FormikHelpers<LoginFormValues>["setFieldError"]
+    setFieldError: FormikHelpers<LoginFormValues>["setFieldError"],
+    setSubmitting: FormikHelpers<LoginFormValues>["setSubmitting"]
   ) => {
     try {
       const userCredential = await signInWithEmailAndPassword(
@@ -62,10 +63,20 @@ const Login: NextPage<Props> = ({}) => {
         email,
         password
       );
-      console.log("User logged in:", userCredential.user);
-      handleClose(); // Close the modal on successful login
+      if (userCredential.user.emailVerified) {
+        console.log("User logged in:", userCredential.user);
+        handleClose(); // Close the modal on successful login
+      } else {
+        await signOut(auth);
+        alert("Email is not verified. Please verify your email.");
+        console.log("Email is not verified. Please verify your email.");
+        setFieldError("email", "Please verify your email");
+        setSubmitting(false);
+      }
     } catch (error) {
       if (error instanceof Error) {
+        setSubmitting(false);
+
         if (error.message.includes("auth/invalid-credential")) {
           setFieldError("password", "Invalid Credentials");
           setFieldError("email", "Invalid Credentials");
@@ -103,12 +114,23 @@ const Login: NextPage<Props> = ({}) => {
             initialValues={{ email: "", password: "" }}
             validationSchema={validationSchema}
             onSubmit={(values, { setSubmitting, setFieldError }) => {
-              loginUser(values.email, values.password, setFieldError);
+              loginUser(
+                values.email,
+                values.password,
+                setFieldError,
+                setSubmitting
+              );
               setSubmitting(false);
             }}
           >
             {({ handleSubmit, touched, errors }) => (
-              <Form noValidate onSubmit={handleSubmit}>
+              <Form
+                noValidate
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSubmit();
+                }}
+              >
                 <Row className="mt-4">
                   <Col sm={{ span: 6, offset: 3 }}>
                     <Form.Group>
