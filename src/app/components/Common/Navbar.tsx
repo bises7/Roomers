@@ -8,8 +8,6 @@ import common from "../../styles/common.module.scss";
 import classNames from "classnames";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import Login from "../Auth/Login";
-import Register from "../Auth/Register";
 import { useState, useEffect } from "react";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { Button } from "react-bootstrap";
