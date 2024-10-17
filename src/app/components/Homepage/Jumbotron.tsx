@@ -7,6 +7,7 @@ import { Button } from "react-bootstrap";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import AuthComponent from "../Auth/Auth";
 
 function Jumbotron() {
   const router = useRouter();
@@ -96,17 +97,7 @@ function Jumbotron() {
               Submit a Review
             </Button>
           )}
-          {!user && (
-            <Button
-              className={classNames({
-                [common.medium]: true,
-                [common.button]: true,
-              })}
-              variant="light"
-            >
-              Register
-            </Button>
-          )}
+          {!user && <AuthComponent className="" login={false} />}
         </div>
       </div>
     </div>

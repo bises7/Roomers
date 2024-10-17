@@ -5,6 +5,7 @@ import classNames from "classnames";
 import { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { useRouter } from "next/navigation";
+import AuthComponent from "../Auth/Auth";
 
 interface Props {
   className: string;
@@ -54,18 +55,9 @@ const HelpUs: NextPage<Props> = ({}) => {
           Submit a review
         </Button>
       )}
-      {!user && (
-        <Button
-          variant="primary"
-          className={classNames({
-            [common.skyblue]: true,
-            [common.button]: true,
-            "mt-3": true,
-          })}
-        >
-          Sign Up
-        </Button>
-      )}
+      <div className="mt-3">
+        {!user && <AuthComponent className="" login={false} />}
+      </div>
     </div>
   );
 };

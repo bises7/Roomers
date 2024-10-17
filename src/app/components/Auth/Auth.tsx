@@ -4,10 +4,11 @@ import Login from "./Login";
 import Register from "./Register";
 
 interface Props {
-  classnames: string;
+  className: string;
+  login: boolean;
 }
 
-const AuthComponent: NextPage<Props> = ({}) => {
+const AuthComponent: NextPage<Props> = ({ login }) => {
   const [showLogin, setShowLogin] = useState(false);
 
   const handleLoginClose = () => setShowLogin(false);
@@ -24,6 +25,7 @@ const AuthComponent: NextPage<Props> = ({}) => {
         className=""
         handleLoginShow={handleLoginShow}
         showLogin={showLogin}
+        login={login}
         handleLoginClose={handleLoginClose}
         handleShowSignUp={handleShowSignUp}
       />

@@ -28,6 +28,7 @@ interface Props {
   handleLoginClose: () => void;
   handleLoginShow: () => void;
   handleShowSignUp: () => void;
+  login: boolean;
 }
 interface LoginFormValues {
   email: string;
@@ -39,6 +40,7 @@ const Login: NextPage<Props> = ({
   handleLoginClose,
   handleLoginShow,
   handleShowSignUp,
+  login,
 }) => {
   const [error, setError] = useState("");
 
@@ -97,14 +99,16 @@ const Login: NextPage<Props> = ({
 
   return (
     <>
-      <Nav.Link
-        className={classNames({
-          [navbarStyles.link]: true,
-        })}
-        onClick={handleLoginShow}
-      >
-        Log in
-      </Nav.Link>
+      {login && (
+        <Nav.Link
+          className={classNames({
+            [navbarStyles.link]: true,
+          })}
+          onClick={handleLoginShow}
+        >
+          Log in
+        </Nav.Link>
+      )}
 
       <Modal show={showLogin} onHide={handleLoginClose} centered size="lg">
         <Modal.Body className="p-5">

@@ -3,8 +3,15 @@ import JumbotronImage from "../../public/images/AboutUs.webp";
 import classNames from "classnames";
 import styles from "../styles/page.module.scss";
 import Register from "../components/Auth/Register";
+import { useState } from "react";
+import AuthComponent from "../components/Auth/Auth";
 
 function Jumbotron() {
+  const [showSignUp, setShowSignUp] = useState(false);
+
+  const handleCloseSignUp = () => setShowSignUp(false);
+  const handleShowSignUp = () => setShowSignUp(true);
+
   return (
     <div
       className={classNames({
@@ -46,7 +53,8 @@ function Jumbotron() {
         </div>
 
         <br />
-        <Register value="Join the community" />
+
+        <AuthComponent className="" login={false} />
       </div>
     </div>
   );

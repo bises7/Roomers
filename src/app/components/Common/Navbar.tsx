@@ -106,7 +106,7 @@ function NavbarComponent() {
                 </>
               ) : (
                 <>
-                  <AuthComponent classnames="" />
+                  <AuthComponent className="" login={true} />
                 </>
               )}
             </Nav>
