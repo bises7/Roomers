@@ -1,5 +1,5 @@
 // components/SearchInput.tsx
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { FormControl, InputGroup } from "react-bootstrap";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { BsArrowReturnLeft, BsSearch } from "react-icons/bs";
@@ -14,15 +14,6 @@ interface props {
 }
 
 const SearchInput = ({ placeholder, query, setQuery, handleSearch }: props) => {
-  // const [query, setQuery] = useState<string>("");
-
-  // const handleSearch = (text: string) => {
-  //   setQuery(text);
-  //   if (!text.length) {
-  //     return;
-  //   }
-  // };
-
   return (
     <InputGroup
       className={classNames({

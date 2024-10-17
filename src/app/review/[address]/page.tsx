@@ -8,7 +8,6 @@ import styles from "../../styles/review.module.scss";
 import profileStyles from "../../styles/profile.module.scss";
 import searchBarStyles from "../../styles/searchbar.module.scss";
 import authStyles from "../../styles/auth.module.scss";
-import SearchInput from "@/app/components/Homepage/SearchBar";
 import Image from "next/image";
 import PaginationComponent from "@/app/components/Common/Pagination";
 import PaginationStyles from "../../styles/pagination.module.scss";
@@ -90,7 +89,6 @@ const Page = ({}) => {
     fiveStars: 0,
   });
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(0);
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -137,12 +135,6 @@ const Page = ({}) => {
   const indexOfLastReview = currentPage * ITEMS_PER_PAGE;
   const indexOfFirstReview = indexOfLastReview - ITEMS_PER_PAGE;
   const currentReviews = reviews.slice(indexOfFirstReview, indexOfLastReview);
-
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const handleSearch = () => {
-    console.log(searchQuery);
-  };
 
   return (
     <div>
