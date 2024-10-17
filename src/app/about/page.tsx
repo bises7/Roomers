@@ -11,6 +11,7 @@ import { BsHeart, BsMegaphone } from "react-icons/bs";
 import { FaRegHandshake } from "react-icons/fa6";
 import Footer from "../components/Common/Footer";
 import Register from "../components/Auth/Register";
+import AuthComponent from "../components/Auth/Auth";
 
 const Page = ({}) => {
   return (
@@ -132,7 +133,7 @@ const Page = ({}) => {
               Share and discover honest rental reviews today.
             </span>
           </div>
-          <Register value="Join Now" />
+          <AuthComponent className="" login={false} />
         </div>
 
         <Footer className="" />
