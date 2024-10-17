@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { FormControl, InputGroup } from "react-bootstrap";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { BsArrowReturnLeft, BsSearch } from "react-icons/bs";
+import { BsArrowReturnLeft } from "react-icons/bs";
 import classNames from "classnames";
 import styles from "../../styles/searchbar.module.scss";
 import reviewStyles from "../../styles/review.module.scss";

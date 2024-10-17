@@ -2,12 +2,10 @@
 
 import NavbarComponent from "@/app/components/Common/Navbar";
 import classNames from "classnames";
-import { Col, Container, FormControl, ProgressBar, Row } from "react-bootstrap";
+import { Col, Container, ProgressBar, Row } from "react-bootstrap";
 import { FaAngleDown } from "react-icons/fa6";
 import styles from "../../styles/review.module.scss";
 import profileStyles from "../../styles/profile.module.scss";
-import searchBarStyles from "../../styles/searchbar.module.scss";
-import authStyles from "../../styles/auth.module.scss";
 import Image from "next/image";
 import PaginationComponent from "@/app/components/Common/Pagination";
 import PaginationStyles from "../../styles/pagination.module.scss";
@@ -81,7 +79,7 @@ const ITEMS_PER_PAGE = 10;
 
 const Page = ({}) => {
   const auth = getAuth();
-  const [user, loading, error] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
 
   const [property, setProperty] = useState<Property | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -248,8 +246,8 @@ const Page = ({}) => {
             <ReviewInput
               handleSearch={() => {}}
               placeholder="Share your experience with the landlord"
-              query={""}
-              setQuery={() => {}}
+              query={experience}
+              setQuery={setExperience}
               className="ms-2"
             />
           </div>
