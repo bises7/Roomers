@@ -1,10 +1,10 @@
-// components/SearchInput.tsx
 import React, { Dispatch, SetStateAction } from "react";
 import { FormControl, InputGroup } from "react-bootstrap";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { BsArrowReturnLeft, BsSearch } from "react-icons/bs";
 import classNames from "classnames";
 import styles from "../../styles/searchbar.module.scss";
+import reviewStyles from "../../styles/review.module.scss";
 
 interface props {
   placeholder: string;
@@ -14,7 +14,7 @@ interface props {
   className: string;
 }
 
-const SearchInput = ({
+const ReviewInput = ({
   placeholder,
   query,
   setQuery,
@@ -23,17 +23,9 @@ const SearchInput = ({
 }: props) => {
   return (
     <InputGroup className={className} hasValidation={false}>
-      <InputGroup.Text
-        className={classNames({
-          [styles.searchBarIcon]: true,
-        })}
-        id="basic-addon1"
-      >
-        <BsSearch />
-      </InputGroup.Text>
       <FormControl
         className={classNames({
-          [styles.searchInput]: true,
+          [reviewStyles.reviewInput]: true,
         })}
         placeholder={placeholder}
         aria-label="Search"
@@ -57,4 +49,4 @@ const SearchInput = ({
   );
 };
 
-export default SearchInput;
+export default ReviewInput;

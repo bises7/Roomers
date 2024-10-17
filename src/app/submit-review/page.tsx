@@ -25,6 +25,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../../firebase/firebaseConfig";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const reviewSchema = Yup.object().shape({
   landlordName: Yup.string(), // Optional field
@@ -96,6 +97,7 @@ interface FileWithPreview {
   file: File;
 }
 interface ReviewFormValues {
+  reviewerName?: string;
   landlordName?: string;
   propertyAddress: string;
   overallRating: number;
@@ -104,6 +106,17 @@ interface ReviewFormValues {
 }
 
 const Page = () => {
+  const [reviewerName, setReviewerName] = useState<string | null>(null);
+
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setReviewerName(user.displayName);
+      }
+    });
+  }, []);
+
   const [starHoverNumber, setStarHoverNumber] = useState<number>(0);
   const [files, setFiles] = useState<FileWithPreview[]>([]);
 
@@ -213,6 +226,7 @@ const Page = () => {
         overallRating: values.overallRating,
         detailedFeedback: values.detailedFeedback,
         keywords: values.keywords || "",
+        reviewerName,
         images: imageUrls,
         createdAt: new Date(),
       });

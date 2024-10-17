@@ -94,6 +94,7 @@ const Page = ({}) => {
           setQuery={setSearchQuery}
           query={searchQuery}
           handleSearch={handleSearch}
+          className="mt-4"
         />
 
         <h4 className="mt-4">Reviews</h4>

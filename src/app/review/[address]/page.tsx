@@ -24,7 +24,9 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../../../../firebase/firebaseConfig";
-
+import ReviewInput from "./ReviewInput";
+import { getAuth } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
 interface Property {
   address: string;
 }
@@ -39,6 +41,7 @@ interface Review {
   landlordName: string;
   overallRating: number;
   propertyAddress: string;
+  reviewerName: string;
 }
 
 // Helper function to calculate rating percentages
@@ -77,6 +80,9 @@ const calculateAverageRating = (reviews: Review[]): number => {
 const ITEMS_PER_PAGE = 10;
 
 const Page = ({}) => {
+  const auth = getAuth();
+  const [user, loading, error] = useAuthState(auth);
+
   const [property, setProperty] = useState<Property | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [landlordName, setLandlordName] = useState<string>("");
@@ -135,6 +141,8 @@ const Page = ({}) => {
   const indexOfLastReview = currentPage * ITEMS_PER_PAGE;
   const indexOfFirstReview = indexOfLastReview - ITEMS_PER_PAGE;
   const currentReviews = reviews.slice(indexOfFirstReview, indexOfLastReview);
+
+  const [experience, setExperience] = useState<string>("");
 
   return (
     <div>
@@ -215,38 +223,37 @@ const Page = ({}) => {
 
         {currentReviews.map((review, index) => (
           <div key={index} className="mt-3">
-            <span>{review.landlordName}</span> <br />
+            <span>{review.reviewerName}</span> <br />
             <span className="text-muted">
               {new Date(review.createdAt.seconds * 1000).toLocaleDateString()}
-            </span>{" "}
+            </span>
             <br />
-            <StarRating stars={review.overallRating} />
-            <p>{review.detailedFeedback}</p>
+            <div className="my-1">
+              <StarRating stars={review.overallRating} />
+            </div>
+            <p className="text-muted">{review.detailedFeedback}</p>
           </div>
         ))}
 
-        <div className="d-flex mt-4">
-          <Image
-            src="https://picsum.photos/200"
-            alt="Profile Pic"
-            width={200}
-            height={200}
-            className={classNames(profileStyles.roundPic)}
-          />
+        {user && !loading && (
+          <div className="d-flex mt-4">
+            <Image
+              src="https://picsum.photos/200"
+              alt="Profile Pic"
+              width={200}
+              height={200}
+              className={classNames(profileStyles.roundPic)}
+            />
 
-          <FormControl
-            className={classNames({
-              [searchBarStyles.searchInput]: true,
-              [authStyles.input]: true,
-              "ps-2": true,
-              "ms-3": true,
-              "border-left": true,
-            })}
-            type="email"
-            placeholder="Share your experience with the landlord"
-            formNoValidate
-          />
-        </div>
+            <ReviewInput
+              handleSearch={() => {}}
+              placeholder="Share your experience with the landlord"
+              query={""}
+              setQuery={() => {}}
+              className="ms-2"
+            />
+          </div>
+        )}
 
         <PaginationComponent
           totalItems={reviews.length}

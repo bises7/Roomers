@@ -31,7 +31,7 @@ function NavbarComponent() {
     return () => unsubscribe(); // Cleanup subscription on unmount
   }, []);
 
-  const handleSignOut = () => {
+  const handleSignOut: () => void = () => {
     signOut(auth)
       .then(() => {
         console.log("User signed out successfully");
@@ -78,30 +78,31 @@ function NavbarComponent() {
               >
                 Browse Reviews
               </Link>
-              <Link
-                href="/submit-review"
-                className={classNames({
-                  [styles.link]: true,
-                  "nav-link": true,
-                  active: pathname === "/submit-review",
-                })}
-              >
-                Submit a Review
-              </Link>
 
               {user ? (
-                // <Nav.Link onClick={handleSignOut}>Sign Out</Nav.Link>
-                <Button
-                  variant="primary"
-                  className={classNames({
-                    [common.skyblue]: true,
-                    [common.medium]: true,
-                    [common.button]: true,
-                  })}
-                  onClick={handleSignOut}
-                >
-                  Sign Out
-                </Button>
+                <>
+                  <Link
+                    href="/submit-review"
+                    className={classNames({
+                      [styles.link]: true,
+                      "nav-link": true,
+                      active: pathname === "/submit-review",
+                    })}
+                  >
+                    Submit a Review
+                  </Link>
+                  <Button
+                    variant="primary"
+                    className={classNames({
+                      [common.skyblue]: true,
+                      [common.medium]: true,
+                      [common.button]: true,
+                    })}
+                    onClick={handleSignOut}
+                  >
+                    Sign Out
+                  </Button>
+                </>
               ) : (
                 <>
                   <Login classnames="" />

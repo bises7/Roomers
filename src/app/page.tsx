@@ -35,6 +35,7 @@ export default function Home() {
           setQuery={setSearchQuery}
           query={searchQuery}
           handleSearch={handleSearch}
+          className="mt-4"
         />
         <TopRated />
         <HowItWorks className="" />

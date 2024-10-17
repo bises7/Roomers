@@ -11,6 +11,23 @@
   transition: "border .24s ease-in-out";
 }
 
+.reviewInput {
+  width: 100%;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  background-color: transparent !important;
+  margin-left: 0;
+  padding-left: 12px;
+  border-radius: 12px;
+  border-color: #dee2e6 !important;
+}
+
+.reviewInput:focus {
+  outline-color: none;
+  box-shadow: none;
+  border-radius: 12px;
+}
+
 .tag {
   border-radius: 12px;
   background-color: #f0f2f5;
