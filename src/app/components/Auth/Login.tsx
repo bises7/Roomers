@@ -23,23 +23,28 @@ import { FormikHelpers } from "formik";
 import { auth } from "../../../../firebase/firebaseConfig";
 
 interface Props {
-  classnames: string;
+  className: string;
+  showLogin: boolean;
+  handleLoginClose: () => void;
+  handleLoginShow: () => void;
+  handleShowSignUp: () => void;
 }
 interface LoginFormValues {
   email: string;
   password: string;
 }
 
-const Login: NextPage<Props> = ({}) => {
-  const [show, setShow] = useState(false);
+const Login: NextPage<Props> = ({
+  showLogin,
+  handleLoginClose,
+  handleLoginShow,
+  handleShowSignUp,
+}) => {
   const [error, setError] = useState("");
 
   if (error) {
     console.log(error);
   }
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   // Validation schema using Yup
   const validationSchema = Yup.object().shape({
@@ -65,7 +70,7 @@ const Login: NextPage<Props> = ({}) => {
       );
       if (userCredential.user.emailVerified) {
         console.log("User logged in:", userCredential.user);
-        handleClose(); // Close the modal on successful login
+        handleLoginClose(); // Close the modal on successful login
       } else {
         await signOut(auth);
         alert("Email is not verified. Please verify your email.");
@@ -96,12 +101,12 @@ const Login: NextPage<Props> = ({}) => {
         className={classNames({
           [navbarStyles.link]: true,
         })}
-        onClick={handleShow}
+        onClick={handleLoginShow}
       >
         Log in
       </Nav.Link>
 
-      <Modal show={show} onHide={handleClose} centered size="lg">
+      <Modal show={showLogin} onHide={handleLoginClose} centered size="lg">
         <Modal.Body className="p-5">
           <div className="text-center">
             <h2>Welcome to Roomers Space</h2>
@@ -195,7 +200,13 @@ const Login: NextPage<Props> = ({}) => {
             <br />
             <small className="text-muted">
               New to Roomers Space?{" "}
-              <span className={classNames("text-muted", styles.link)}>
+              <span
+                className={classNames("text-muted", styles.link)}
+                onClick={() => {
+                  handleLoginClose();
+                  handleShowSignUp();
+                }}
+              >
                 Sign up
               </span>
             </small>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { NextPage } from "next";
 import {
   Button,
@@ -27,14 +27,19 @@ import { auth, db } from "../../../../firebase/firebaseConfig";
 
 interface Props {
   value: string;
+  showSignUp: boolean;
+  handleCloseSignUp: () => void;
+  handleShowSignUp: () => void;
+  handleLoginShow: () => void;
 }
 
-const Register: NextPage<Props> = ({ value }) => {
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
+const Register: NextPage<Props> = ({
+  value,
+  showSignUp,
+  handleCloseSignUp,
+  handleShowSignUp,
+  handleLoginShow,
+}) => {
   const validationSchema = Yup.object().shape({
     username: Yup.string()
       .required("Username is required")
@@ -89,7 +94,7 @@ const Register: NextPage<Props> = ({ value }) => {
       });
 
       console.log("User registered:", user);
-      handleClose(); // Close the modal on successful registration
+      handleCloseSignUp(); // Close the modal on successful registration
     } catch (error) {
       console.error("Error signing up:", error);
     }
@@ -104,12 +109,12 @@ const Register: NextPage<Props> = ({ value }) => {
           [common.medium]: true,
           [common.button]: true,
         })}
-        onClick={handleShow}
+        onClick={handleShowSignUp}
       >
         {value}
       </Button>
 
-      <Modal show={show} onHide={handleClose} centered size="lg">
+      <Modal show={showSignUp} onHide={handleCloseSignUp} centered size="lg">
         <Modal.Body className="p-5">
           <div className="text-center">
             <h2>Welcome to Roomers Space</h2>
@@ -238,7 +243,13 @@ const Register: NextPage<Props> = ({ value }) => {
                 <div className="text-center mt-4">
                   <small className="text-muted">
                     Already have an account?{" "}
-                    <span className={classNames(styles.link, "text-muted")}>
+                    <span
+                      className={classNames(styles.link, "text-muted")}
+                      onClick={() => {
+                        handleCloseSignUp();
+                        handleLoginShow();
+                      }}
+                    >
                       Sign in
                     </span>
                   </small>

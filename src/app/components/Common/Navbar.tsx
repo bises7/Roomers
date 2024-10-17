@@ -14,6 +14,7 @@ import { useState, useEffect } from "react";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { Button } from "react-bootstrap";
 import { auth } from "../../../../firebase/firebaseConfig";
+import AuthComponent from "../Auth/Auth";
 
 function NavbarComponent() {
   const pathname = usePathname();
@@ -105,8 +106,7 @@ function NavbarComponent() {
                 </>
               ) : (
                 <>
-                  <Login classnames="" />
-                  <Register value="Get Started" />
+                  <AuthComponent classnames="" />
                 </>
               )}
             </Nav>
