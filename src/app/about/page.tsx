@@ -10,7 +10,6 @@ import classNames from "classnames";
 import { BsHeart, BsMegaphone } from "react-icons/bs";
 import { FaRegHandshake } from "react-icons/fa6";
 import Footer from "../components/Common/Footer";
-import Register from "../components/Auth/Register";
 import AuthComponent from "../components/Auth/Auth";
 
 const Page = ({}) => {
