@@ -7,7 +7,7 @@ import styles from "../../styles/navbar.module.scss";
 import common from "../../styles/common.module.scss";
 import classNames from "classnames";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Login from "../Auth/Login";
 import Register from "../Auth/Register";
 import { useState, useEffect } from "react";
@@ -18,6 +18,7 @@ import AuthComponent from "../Auth/Auth";
 
 function NavbarComponent() {
   const pathname = usePathname();
+  const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -35,6 +36,7 @@ function NavbarComponent() {
   const handleSignOut: () => void = () => {
     signOut(auth)
       .then(() => {
+        router.push("/");
         console.log("User signed out successfully");
       })
       .catch((error) => {

@@ -4,8 +4,27 @@ import classNames from "classnames";
 import common from "../../styles/common.module.scss";
 import styles from "../../styles/page.module.scss";
 import { Button } from "react-bootstrap";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 
 function Jumbotron() {
+  const router = useRouter();
+
+  const [user, setUser] = useState<User | null>(null); // State to hold the user object
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user); // User is signed in
+      } else {
+        setUser(null); // User is signed out
+      }
+    });
+    return () => unsubscribe(); // Cleanup subscription
+  }, []);
+
   return (
     <div
       className={classNames({
@@ -57,18 +76,37 @@ function Jumbotron() {
               "me-3": true,
             })}
             variant="primary"
+            onClick={() => {
+              router.push("/review");
+            }}
           >
             Browse Reviews
           </Button>
-          <Button
-            className={classNames({
-              [common.medium]: true,
-              [common.button]: true,
-            })}
-            variant="light"
-          >
-            Submit a Review
-          </Button>
+          {user && (
+            <Button
+              className={classNames({
+                [common.medium]: true,
+                [common.button]: true,
+              })}
+              variant="light"
+              onClick={() => {
+                router.push("/submit-review");
+              }}
+            >
+              Submit a Review
+            </Button>
+          )}
+          {!user && (
+            <Button
+              className={classNames({
+                [common.medium]: true,
+                [common.button]: true,
+              })}
+              variant="light"
+            >
+              Register
+            </Button>
+          )}
         </div>
       </div>
     </div>
